@@ -1,6 +1,4 @@
-﻿using NHunspell;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Media;
@@ -16,8 +14,6 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         private string currentDoc; // string of current document's name
         private int linesPrinted;  // line counter for printing
         private string[] lines;    // array of strings for printing lines
-        private Hunspell hunspell = new Hunspell("C:\\Users\\kick_\\source\\repos\\Word Processor\\Word Processor\\en_GB_oxendict.aff",
-                                                    "C:\\Users\\kick_\\source\\repos\\Word Processor\\Word Processor\\en_GB_oxendict.dic");
 
         #region File Menu Methods
 
@@ -25,7 +21,7 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         { // open event
             try // try to open new document
             { // open try block
-                if (magicSpellBox.Modified) // if the editor's text box has been modified
+                if (textBoxEditor.Modified) // if the editor's text box has been modified
                 { // open main if statement
                     DialogResult answer = MessageBox.Show(                     // show user message box
                         "Save current document before creating new document?", // ask if they would like to save the current document
@@ -36,15 +32,15 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
                     { // open nested if statement
                         currentDoc = "";                            // empty current file
                         Text = "Rich Text Processor: New Document"; // header
-                        magicSpellBox.Modified = false;             // set editor to unmodified
-                        magicSpellBox.Clear();                      // clear editor
+                        textBoxEditor.Modified = false;             // set editor to unmodified
+                        textBoxEditor.Clear();                      // clear editor
                         return;
                     } // close nested if statement
                     else // the user answers yes
                     { // open nested else statement
                         SaveToolStripMenuItem_Click(this, new EventArgs()); // user save menu click event method
-                        magicSpellBox.Modified = false;                     // set editor to unmodified
-                        magicSpellBox.Clear();                              // clear editor
+                        textBoxEditor.Modified = false;                     // set editor to unmodified
+                        textBoxEditor.Clear();                              // clear editor
                         currentDoc = "";                                    // empty current file
                         Text = "Rich Text Processor: New Document";         // header
                         return;
@@ -54,8 +50,8 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
                 { // open else statement
                     currentDoc = "";                            // empty current file
                     Text = "Rich Text Processor: New Document"; // header
-                    magicSpellBox.Modified = false;             // set editor to unmodified
-                    magicSpellBox.Clear();                      // clear editor
+                    textBoxEditor.Modified = false;             // set editor to unmodified
+                    textBoxEditor.Clear();                      // clear editor
                     return;
                 } // close else statement
             } // close try block
@@ -68,14 +64,14 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         { // open event
             try // try to open a document from file
             { // open try block
-                if (magicSpellBox.Modified) // if the editor has been modified
+                if (textBoxEditor.Modified) // if the editor has been modified
                 { // open if statement
                     DialogResult answer = MessageBox.Show(                         // show user message box
                         "Save current file before opening another document?",      // ask if they would like to save the current document
                         "Unsaved Document",                                        // header
                         MessageBoxButtons.YesNo,                                   // ask user for yes or no input
                         MessageBoxIcon.Question);
-                    if (answer == DialogResult.No) magicSpellBox.Modified = false; // if they answer no the editor is set to unmodified
+                    if (answer == DialogResult.No) textBoxEditor.Modified = false; // if they answer no the editor is set to unmodified
                     else SaveToolStripMenuItem_Click(this, new EventArgs());       // otherwise, use save event method
                 } // close if statement 
                 OpenFile(); // use the open file method
@@ -98,18 +94,18 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
                 { // open main if statement
                     if (openFileDialog.FileName == "") return; // if the file name is empty, return
                     string strExt = System.IO.Path.GetExtension(openFileDialog.FileName).ToUpper(); // the file extension is retrived as a string and set to upper case
-                    if (strExt == ".RTF") magicSpellBox.LoadFile(openFileDialog.FileName, RichTextBoxStreamType.RichText); // if the string extension is .RTF, load the file
+                    if (strExt == ".RTF") textBoxEditor.LoadFile(openFileDialog.FileName, RichTextBoxStreamType.RichText); // if the string extension is .RTF, load the file
                     else // otherwise, the files is of a different type, so we prepare
                     { // open nested else statement
                         System.IO.StreamReader txtReader = new System.IO.StreamReader(openFileDialog.FileName); // open the stream reader
-                        magicSpellBox.Text = txtReader.ReadToEnd();                                             // read the file to the editor
+                        textBoxEditor.Text = txtReader.ReadToEnd();                                             // read the file to the editor
                         txtReader.Close();                                                                      // close stream reader
                         txtReader = null;                                                                       // set reader to null
-                        magicSpellBox.SelectionStart = 0;                                                       // reset text selection
-                        magicSpellBox.SelectionLength = 0;
+                        textBoxEditor.SelectionStart = 0;                                                       // reset text selection
+                        textBoxEditor.SelectionLength = 0;
                     } // close nested else statement
                     currentDoc = openFileDialog.FileName;                   // current file is set
-                    magicSpellBox.Modified = false;                         // set editor to unmodified
+                    textBoxEditor.Modified = false;                         // set editor to unmodified
                     Text = "Rich Text Processor: " + currentDoc.ToString(); // new header with file name
                 } // close main if statement
                 else _ = MessageBox.Show("Open File request cancelled by user.", "Cancelled"); // otherwise, the user cancels
@@ -131,18 +127,18 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
                 { // open main if statement
                     if (saveFileDialog.FileName == "") return; // if the file name is empty, return
                     string strExt = System.IO.Path.GetExtension(saveFileDialog.FileName).ToUpper(); // get extension as string, set to upper case
-                    if (strExt == ".RTF") magicSpellBox.SaveFile(saveFileDialog.FileName, RichTextBoxStreamType.RichText); // if extension is .RTF, save
+                    if (strExt == ".RTF") textBoxEditor.SaveFile(saveFileDialog.FileName, RichTextBoxStreamType.RichText); // if extension is .RTF, save
                     else // otherwise it is of another file type, and we have some things to do for that case
                     { // open nested else statement
                         System.IO.StreamWriter txtWriter = new System.IO.StreamWriter(saveFileDialog.FileName); // open stream writer
-                        txtWriter.Write(magicSpellBox.Text);                                                    // write the text from the editor to the file
+                        txtWriter.Write(textBoxEditor.Text);                                                    // write the text from the editor to the file
                         txtWriter.Close();                                                                      // close the writer
                         txtWriter = null;                                                                       // set writer to null
-                        magicSpellBox.SelectionStart = 0;                                                       // reset selection
-                        magicSpellBox.SelectionLength = 0;
+                        textBoxEditor.SelectionStart = 0;                                                       // reset selection
+                        textBoxEditor.SelectionLength = 0;
                     } // closer nested else statement
                     currentDoc = saveFileDialog.FileName;                            // current file name is set
-                    magicSpellBox.Modified = false;                                  // set to unmodified
+                    textBoxEditor.Modified = false;                                  // set to unmodified
                     Text = "Rich Text Processor: " + currentDoc.ToString();          // header with current file name
                     _ = MessageBox.Show(currentDoc.ToString() + " saved.", "Saved"); // confirm results to user
                 } // close main if statement
@@ -157,7 +153,7 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         { // open event
             try // try to exit the editor
             { // open try block
-                if (magicSpellBox.Modified) // if the editor has been modified
+                if (textBoxEditor.Modified) // if the editor has been modified
                 { // open main if
                     DialogResult answer = MessageBox.Show(    // message box to user
                         "Save this document before closing?", // ask if they want to save
@@ -167,13 +163,13 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
                     if (answer == DialogResult.Yes) return; // if they answer yes, return
                     else // otherwise
                     { // open nested else
-                        magicSpellBox.Modified = false; // set to unmodified
+                        textBoxEditor.Modified = false; // set to unmodified
                         Application.Exit();             // use exit method
                     } // close nested else
                 } // close main if
                 else // otherwise, the editor hasn't been used
                 { // open else
-                    magicSpellBox.Modified = false; // set unnmodified
+                    textBoxEditor.Modified = false; // set unnmodified
                     Application.Exit(); //          // use exit method
                 } // close else
             } // close try block
@@ -191,7 +187,7 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         { // open event
             try // try to selct all
             { // open try block
-                magicSpellBox.SelectAll(); // select all method
+                textBoxEditor.SelectAll(); // select all method
             } // close try block
             catch (Exception) // can't select all text
             { // open catch block
@@ -202,7 +198,7 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         { // open event
             try // try to copy text
             { // open try block
-                magicSpellBox.Copy(); // use copy method
+                textBoxEditor.Copy(); // use copy method
             } // close try block
             catch (Exception) // can't copy text
             { // open catch block
@@ -213,7 +209,7 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         { // open event 
             try //  try to cut text
             { //  open try block
-                magicSpellBox.Cut(); // use cut method
+                textBoxEditor.Cut(); // use cut method
             } // close try block
             catch // can't cut text
             { // open catch block
@@ -224,7 +220,7 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         { // open event
             try // try to paste text
             { // open try block
-                magicSpellBox.Paste(); // paste method
+                textBoxEditor.Paste(); // paste method
             } // close try block
             catch // can't paste
             { // open catch block
@@ -235,7 +231,7 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         { //  open event
             try //  try to undo the last command
             { // open try block
-                if (magicSpellBox.CanUndo) magicSpellBox.Undo(); // undo method
+                if (textBoxEditor.CanUndo) textBoxEditor.Undo(); // undo method
             } // close try block
             catch // can't undo
             { // open catch block
@@ -246,7 +242,7 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         { //  open event
             try // try to redo
             { //  open try block
-                if (magicSpellBox.CanRedo) magicSpellBox.Redo(); // if you can use the redo method in the editor, use it
+                if (textBoxEditor.CanRedo) textBoxEditor.Redo(); // if you can use the redo method in the editor, use it
             } // close try block
             catch // can't use redo
             { // open catch block
@@ -298,8 +294,8 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         { // open method
             char[] param = { '\n' }; // get an array of the numder of new lines
             lines = printDialog.PrinterSettings.PrintRange == PrintRange.Selection // set up printing based on document parameters
-                ? magicSpellBox.SelectedText.Split(param)
-                : magicSpellBox.Text.Split(param);
+                ? textBoxEditor.SelectedText.Split(param)
+                : textBoxEditor.Text.Split(param);
             int i = 0;
             char[] trimParam = { '\r' };
             foreach (string s in lines) lines[i++] = s.TrimEnd(trimParam);
@@ -308,11 +304,11 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         { // open method
             int x = e.MarginBounds.Left;                           // set margins
             int y = e.MarginBounds.Top;
-            Brush brush = new SolidBrush(magicSpellBox.ForeColor); // print with color
+            Brush brush = new SolidBrush(textBoxEditor.ForeColor); // print with color
             while (linesPrinted < lines.Length) // loop for whole document
             { // open while loop
                 e.Graphics.DrawString(lines[linesPrinted++], // draw the line
-                    magicSpellBox.Font, brush, x, y);        // print with font
+                    textBoxEditor.Font, brush, x, y);        // print with font
                 y += 15;                                     // increase y
                 if (y >= e.MarginBounds.Bottom) // if y is higher than the bottom of the page
                 { // open if statement
@@ -332,9 +328,9 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         { // open event
             try // try to set current font
             { // open try block
-                fontDialog.Font = magicSpellBox.SelectionFont ?? null;                                         // logic for font diaglog box
+                fontDialog.Font = textBoxEditor.SelectionFont ?? null;                                         // logic for font diaglog box
                 fontDialog.ShowApply = true;
-                if (fontDialog.ShowDialog() == DialogResult.OK) magicSpellBox.SelectionFont = fontDialog.Font; // if user clicks ok, set selected font
+                if (fontDialog.ShowDialog() == DialogResult.OK) textBoxEditor.SelectionFont = fontDialog.Font; // if user clicks ok, set selected font
             } //  close try block
             catch // can't select font
             { //  open catch block
@@ -345,8 +341,8 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         { // open event 
             try // try to select font color
             { // open try block
-                colorDialog.Color = magicSpellBox.ForeColor;                                                       // color dialog
-                if (colorDialog.ShowDialog() == DialogResult.OK) magicSpellBox.SelectionColor = colorDialog.Color; // user clicks ok, set selected color
+                colorDialog.Color = textBoxEditor.ForeColor;                                                       // color dialog
+                if (colorDialog.ShowDialog() == DialogResult.OK) textBoxEditor.SelectionColor = colorDialog.Color; // user clicks ok, set selected color
             }// close try block
             catch // cant' select font color
             { // open catch block
@@ -357,12 +353,12 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         { // open event
             try // try to make text bold
             { // open try block
-                if (magicSpellBox.SelectionFont != null) // if font is not set to null
+                if (textBoxEditor.SelectionFont != null) // if font is not set to null
                 { // open if
-                    Font currentFont = magicSpellBox.SelectionFont;                                                 // set current font
+                    Font currentFont = textBoxEditor.SelectionFont;                                                 // set current font
                     FontStyle newFontStyle;                                                                         // change font style
-                    newFontStyle = magicSpellBox.SelectionFont.Style ^ FontStyle.Bold;                              // set to bold
-                    magicSpellBox.SelectionFont = new Font(currentFont.FontFamily, currentFont.Size, newFontStyle); // pass to editor
+                    newFontStyle = textBoxEditor.SelectionFont.Style ^ FontStyle.Bold;                              // set to bold
+                    textBoxEditor.SelectionFont = new Font(currentFont.FontFamily, currentFont.Size, newFontStyle); // pass to editor
                 } // close if
             } // close try block
             catch // can't set to bold
@@ -374,12 +370,12 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         { // open event
             try // try to make text italics
             { // open try block
-                if (magicSpellBox.SelectionFont != null) // if font is not set to null 
+                if (textBoxEditor.SelectionFont != null) // if font is not set to null 
                 { // open if 
-                    Font currentFont = magicSpellBox.SelectionFont;                                                 // set current font
+                    Font currentFont = textBoxEditor.SelectionFont;                                                 // set current font
                     FontStyle newFontStyle;                                                                         // change font style
-                    newFontStyle = magicSpellBox.SelectionFont.Style ^ FontStyle.Italic;                            // set to italics
-                    magicSpellBox.SelectionFont = new Font(currentFont.FontFamily, currentFont.Size, newFontStyle); // pass to editor
+                    newFontStyle = textBoxEditor.SelectionFont.Style ^ FontStyle.Italic;                            // set to italics
+                    textBoxEditor.SelectionFont = new Font(currentFont.FontFamily, currentFont.Size, newFontStyle); // pass to editor
                 } // close if
             } // close try block
             catch // can't italicize
@@ -391,12 +387,12 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         { // open event
             try // try to underline text
             { // open try block
-                if (magicSpellBox.SelectionFont != null) // if font is not set to null 
+                if (textBoxEditor.SelectionFont != null) // if font is not set to null 
                 { // open if
-                    Font currentFont = magicSpellBox.SelectionFont;                                                 // set current font
+                    Font currentFont = textBoxEditor.SelectionFont;                                                 // set current font
                     FontStyle newFontStyle;                                                                         // change font style
-                    newFontStyle = magicSpellBox.SelectionFont.Style ^ FontStyle.Underline;                         // set to underline
-                    magicSpellBox.SelectionFont = new Font(currentFont.FontFamily, currentFont.Size, newFontStyle); // pass to editor
+                    newFontStyle = textBoxEditor.SelectionFont.Style ^ FontStyle.Underline;                         // set to underline
+                    textBoxEditor.SelectionFont = new Font(currentFont.FontFamily, currentFont.Size, newFontStyle); // pass to editor
                 } // close if
             } // close try block
             catch // can't underline
@@ -408,7 +404,7 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         { // open event
             try // try to align text left
             { // open try block
-                magicSpellBox.SelectionAlignment = HorizontalAlignment.Left; // set alignment to left
+                textBoxEditor.SelectionAlignment = HorizontalAlignment.Left; // set alignment to left
                 buttonAlignCenter.Checked = false;                           // set other alignment buttons to off
                 buttonAlignRight.Checked = false;
             } // close try block
@@ -421,7 +417,7 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         { // open event
             try // try to align text to center
             { // open try block
-                magicSpellBox.SelectionAlignment = HorizontalAlignment.Center; // set alignment to center
+                textBoxEditor.SelectionAlignment = HorizontalAlignment.Center; // set alignment to center
                 buttonAlignRight.Checked = false;                              // set other alignment buttons to off
                 buttonAlignLeft.Checked = false;
             } // close try block
@@ -434,7 +430,7 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         { // open event
             try // try to align text to right
             { // open try block
-                magicSpellBox.SelectionAlignment = HorizontalAlignment.Right; // set alignment to right
+                textBoxEditor.SelectionAlignment = HorizontalAlignment.Right; // set alignment to right
                 buttonAlignCenter.Checked = false;                            // set other alignment buttons to off
                 buttonAlignLeft.Checked = false;
             } // close try block
@@ -445,12 +441,12 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         } // close event
         private void ButtonBullets_Click(object sender, EventArgs e) // bulleted text button event
         { // open event
-            if (magicSpellBox.SelectionBullet == false) // if the text is not bulleted already
+            if (textBoxEditor.SelectionBullet == false) // if the text is not bulleted already
             { // open if
                 try // try to add bullets
                 { // open try block
-                    magicSpellBox.BulletIndent = 10;      // set indention
-                    magicSpellBox.SelectionBullet = true; // add bullets
+                    textBoxEditor.BulletIndent = 10;      // set indention
+                    textBoxEditor.SelectionBullet = true; // add bullets
                 } // close try block
                 catch // can't bullet text
                 { // open catch block
@@ -461,7 +457,7 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
             { // open else
                 try // try to remove bullets
                 { // open try block
-                    magicSpellBox.SelectionBullet = false; // set to unbulleted
+                    textBoxEditor.SelectionBullet = false; // set to unbulleted
                 } // close try block
                 catch // can't remove bullets
                 { // open catch block
@@ -478,7 +474,7 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         { // open method
             try // try to close
             { // open try block
-                if (magicSpellBox.Modified) // if the editor has been modified
+                if (textBoxEditor.Modified) // if the editor has been modified
                 { // open if
                     DialogResult answer = MessageBox.Show(       // open message box
                         "Save current document before exiting?", // asking user if they want to save
@@ -487,13 +483,13 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
                         MessageBoxIcon.Question);
                     if (answer == DialogResult.No) // if user answers no
                     { // open nest if
-                        magicSpellBox.Modified = false; // set editor unmodified
-                        magicSpellBox.Clear();          // clear editor
+                        textBoxEditor.Modified = false; // set editor unmodified
+                        textBoxEditor.Clear();          // clear editor
                         return;
                     } // close nested if
                     else SaveToolStripMenuItem_Click(this, new EventArgs()); // save menu event method
                 } // close if
-                else magicSpellBox.Clear();                 // clear editor
+                else textBoxEditor.Clear();                 // clear editor
                 currentDoc = "";                            // empty current document string
             } // close try block
             catch // can't close form
@@ -506,91 +502,25 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
 
         #region Word and Character Count
 
-        private void TextChanged_Triggers(object sender, EventArgs e)
+        private void TextChanged(object sender, EventArgs e)
         {
             TextChanged_WordCount(sender, e);
             TextChanged_CharacterCount(sender, e);
-            TextChanged_CheckSpelling(sender, e);
         }
 
         private void TextChanged_WordCount(object sender, EventArgs e)
         {
-            string[] words = Regex.Split(magicSpellBox.Text, @"\W+");
+            string[] words = Regex.Split(textBoxEditor.Text, @"\W+");
             int wordCount = words.Length;
             labelWordCount.Text = wordCount == 0 || wordCount > 1 ? $"{wordCount} words" : "1 word";
         }
+        #endregion
 
         private void TextChanged_CharacterCount(object sender, EventArgs e)
         {
-            int charCount = magicSpellBox.Text.Length;
+            int charCount = textBoxEditor.Text.Length;
             labelCharCount.Text = charCount == 0 || charCount > 1 ? $"{charCount} characters" : "1 character";
         }
 
-        private void TextChanged_CheckSpelling(object sender, EventArgs e)
-        {
-            string[] words = Regex.Split(magicSpellBox.Text, @"\W+");
-
-            magicSpellBox.ClearSquigglyLines(); // Clear existing squiggly lines
-
-            foreach (string word in words)
-            {
-                if (!hunspell.Spell(word))
-                {
-                    int startIndex = magicSpellBox.Text.IndexOf(word);
-                    if (startIndex >= 0)
-                    {
-                        Point startPoint = magicSpellBox.GetPositionFromCharIndex(startIndex);
-                        int wordWidth = TextRenderer.MeasureText(word, magicSpellBox.Font).Width;
-                        Rectangle rect = new Rectangle(startPoint, new Size(wordWidth, magicSpellBox.Font.Height));
-                        magicSpellBox.AddSquigglyLine(rect);
-                    }
-                }
-            }
-        }
-
-        private void DrawSquigglyLine(Rectangle rect)
-        {
-            using (Graphics g = magicSpellBox.CreateGraphics())
-            {
-                Pen redPen = new Pen(Color.Red, 2);
-                int y = rect.Bottom - 2;
-                for (int i = rect.Left; i < rect.Right; i += 3)
-                {
-                    g.DrawLine(redPen, i, y, i + 1, y - 2);
-                    g.DrawLine(redPen, i + 1, y - 2, i + 2, y);
-                }
-            }
-        }
-        #endregion
     } // close form
-
-    public class MagicSpellBox : RichTextBox
-    {
-        private List<Rectangle> squigglyLines = new List<Rectangle>();
-
-        public void AddSquigglyLine(Rectangle rect)
-        {
-            squigglyLines.Add(rect);
-            this.Invalidate(); // Trigger a repaint
-        }
-
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-
-            using (Pen redPen = new Pen(Color.Red, 2))
-            {
-                foreach (Rectangle rect in squigglyLines)
-                {
-                    int y = rect.Bottom - 2;
-                    for (int i = rect.Left; i < rect.Right; i += 3)
-                    {
-                        e.Graphics.DrawLine(redPen, i, y, i + 1, y - 2);
-                        e.Graphics.DrawLine(redPen, i + 1, y - 2, i + 2, y);
-                    }
-                }
-            }
-        }
-    }
-
 } // close main

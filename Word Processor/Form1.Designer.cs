@@ -52,7 +52,7 @@
             this.fontDialog = new System.Windows.Forms.FontDialog();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.labelWordCount = new System.Windows.Forms.ToolStripStatusLabel();
-            this.labelCharCount = new System.Windows.Forms.ToolStripStatusLabel();
+            this.textBoxEditor = new System.Windows.Forms.RichTextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -70,7 +70,7 @@
             this.pageSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.previewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.printToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.magicSpellBox = new Rich_Text_Processor.MagicSpellBox();
+            this.labelCharCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -96,9 +96,9 @@
             this.buttonAlignRight,
             this.toolStripSeparator3,
             this.toolStripButton4});
-            this.toolStrip.Location = new System.Drawing.Point(0, 30);
+            this.toolStrip.Location = new System.Drawing.Point(0, 28);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(954, 31);
+            this.toolStrip.Size = new System.Drawing.Size(954, 27);
             this.toolStrip.TabIndex = 2;
             this.toolStrip.Text = "toolStrip";
             // 
@@ -252,11 +252,15 @@
             this.labelWordCount.Text = "0 words";
             this.labelWordCount.ToolTipText = "Total Word Count";
             // 
-            // labelCharCount
+            // textBoxEditor
             // 
-            this.labelCharCount.Name = "labelCharCount";
-            this.labelCharCount.Size = new System.Drawing.Size(88, 20);
-            this.labelCharCount.Text = "0 characters";
+            this.textBoxEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxEditor.Location = new System.Drawing.Point(0, 55);
+            this.textBoxEditor.Name = "textBoxEditor";
+            this.textBoxEditor.Size = new System.Drawing.Size(954, 640);
+            this.textBoxEditor.TabIndex = 4;
+            this.textBoxEditor.Text = "";
+            this.textBoxEditor.TextChanged += new System.EventHandler(this.TextChanged);
             // 
             // menuStrip1
             // 
@@ -267,7 +271,7 @@
             this.publishToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(954, 30);
+            this.menuStrip1.Size = new System.Drawing.Size(954, 28);
             this.menuStrip1.TabIndex = 6;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -396,22 +400,18 @@
             this.printToolStripMenuItem.Text = "Print";
             this.printToolStripMenuItem.Click += new System.EventHandler(this.PrintToolStripMenuItem_Click);
             // 
-            // magicSpellBox
+            // labelCharCount
             // 
-            this.magicSpellBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.magicSpellBox.Location = new System.Drawing.Point(0, 61);
-            this.magicSpellBox.Name = "magicSpellBox";
-            this.magicSpellBox.Size = new System.Drawing.Size(954, 634);
-            this.magicSpellBox.TabIndex = 7;
-            this.magicSpellBox.Text = "";
-            this.magicSpellBox.TextChanged += new System.EventHandler(this.TextChanged_Triggers);
+            this.labelCharCount.Name = "labelCharCount";
+            this.labelCharCount.Size = new System.Drawing.Size(88, 20);
+            this.labelCharCount.Text = "0 characters";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(954, 721);
-            this.Controls.Add(this.magicSpellBox);
+            this.Controls.Add(this.textBoxEditor);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.menuStrip1);
@@ -455,6 +455,7 @@
         private System.Windows.Forms.ToolStripButton toolStripButton4;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel labelWordCount;
+        private System.Windows.Forms.RichTextBox textBoxEditor;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
@@ -473,7 +474,6 @@
         private System.Windows.Forms.ToolStripMenuItem previewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem printToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel labelCharCount;
-        private MagicSpellBox magicSpellBox;
     }
 }
 
