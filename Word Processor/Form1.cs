@@ -533,7 +533,28 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
             {
                 if (!hunspell.Spell(word))
                 {
-                    MessageBox.Show($"Misspelled word: {word}");
+                    int startIndex = textBoxEditor.Text.IndexOf(word);
+                    if (startIndex >= 0)
+                    {
+                        Point startPoint = textBoxEditor.GetPositionFromCharIndex(startIndex);
+                        int wordWidth = TextRenderer.MeasureText(word, textBoxEditor.Font).Width;
+                        Rectangle rect = new Rectangle(startPoint, new Size(wordWidth, textBoxEditor.Font.Height));
+                        DrawSquigglyLine(rect);
+                    }
+                }
+            }
+        }
+
+        private void DrawSquigglyLine(Rectangle rect)
+        {
+            using (Graphics g = textBoxEditor.CreateGraphics())
+            {
+                Pen redPen = new Pen(Color.Red, 2);
+                int y = rect.Bottom - 2;
+                for (int i = rect.Left; i < rect.Right; i += 3)
+                {
+                    g.DrawLine(redPen, i, y, i + 1, y - 2);
+                    g.DrawLine(redPen, i + 1, y - 2, i + 2, y);
                 }
             }
         }
