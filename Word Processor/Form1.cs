@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Media;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Rich_Text_Processor // this program will be a word processor based around the rich text box
@@ -499,16 +500,27 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         #endregion
 
 
-        #region Word Count
+        #region Word and Character Count
 
-        private void TextChanged_WordCount(object sender, EventArgs e) // word counter event method
-        { // open event
-            int wordCount = textBoxEditor.Text.Split(                            // total words in the document equals the text in the editor . . .
-                new char[] { ' ', '.', '?', '\\', '/', '\n', '\r', '\t', '\v' }, // . . . split by white space, punctuation, ect
-                StringSplitOptions.RemoveEmptyEntries).Length;
-            labelWordCount.Text = wordCount == 0                                 // label is set to the word count and changes on the condition . . .
-                || wordCount > 1 ? wordCount.ToString() + " words" : "1 word";   // . . . that there is only one word in the document
-        } // close event
+        private void TextChanged(object sender, EventArgs e)
+        {
+            TextChanged_WordCount(sender, e);
+            TextChanged_CharacterCount(sender, e);
+        }
+
+        private void TextChanged_WordCount(object sender, EventArgs e)
+        {
+            string[] words = Regex.Split(textBoxEditor.Text, @"\W+");
+            int wordCount = words.Length;
+            labelWordCount.Text = wordCount == 0 || wordCount > 1 ? $"{wordCount} words" : "1 word";
+        }
         #endregion
+
+        private void TextChanged_CharacterCount(object sender, EventArgs e)
+        {
+            int charCount = textBoxEditor.Text.Length;
+            labelCharCount.Text = charCount == 0 || charCount > 1 ? $"{charCount} characters" : "1 character";
+        }
+
     } // close form
 } // close main

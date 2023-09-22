@@ -70,6 +70,7 @@
             this.pageSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.previewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.printToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.labelCharCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -236,7 +237,8 @@
             // 
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.labelWordCount});
+            this.labelWordCount,
+            this.labelCharCount});
             this.statusStrip.Location = new System.Drawing.Point(0, 695);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(954, 26);
@@ -258,7 +260,7 @@
             this.textBoxEditor.Size = new System.Drawing.Size(954, 640);
             this.textBoxEditor.TabIndex = 4;
             this.textBoxEditor.Text = "";
-            this.textBoxEditor.TextChanged += new System.EventHandler(this.TextChanged_WordCount);
+            this.textBoxEditor.TextChanged += new System.EventHandler(this.TextChanged);
             // 
             // menuStrip1
             // 
@@ -398,6 +400,12 @@
             this.printToolStripMenuItem.Text = "Print";
             this.printToolStripMenuItem.Click += new System.EventHandler(this.PrintToolStripMenuItem_Click);
             // 
+            // labelCharCount
+            // 
+            this.labelCharCount.Name = "labelCharCount";
+            this.labelCharCount.Size = new System.Drawing.Size(88, 20);
+            this.labelCharCount.Text = "0 characters";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -465,6 +473,7 @@
         private System.Windows.Forms.ToolStripMenuItem pageSetupToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem previewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem printToolStripMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel labelCharCount;
     }
 }
 
