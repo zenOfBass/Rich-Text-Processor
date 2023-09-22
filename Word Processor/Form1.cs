@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NHunspell;
+using System;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Media;
@@ -14,6 +15,8 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         private string currentDoc; // string of current document's name
         private int linesPrinted;  // line counter for printing
         private string[] lines;    // array of strings for printing lines
+        private Hunspell hunspell = new Hunspell("C:\\Users\\kick_\\source\\repos\\Word Processor\\Word Processor\\en_GB_oxendict.aff",
+                                                    "C:\\Users\\kick_\\source\\repos\\Word Processor\\Word Processor\\en_GB_oxendict.dic");
 
         #region File Menu Methods
 
@@ -502,10 +505,11 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
 
         #region Word and Character Count
 
-        private void TextChanged(object sender, EventArgs e)
+        private void TextChanged_Triggers(object sender, EventArgs e)
         {
             TextChanged_WordCount(sender, e);
             TextChanged_CharacterCount(sender, e);
+            TextChanged_CheckSpelling(sender, e);
         }
 
         private void TextChanged_WordCount(object sender, EventArgs e)
@@ -514,7 +518,6 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
             int wordCount = words.Length;
             labelWordCount.Text = wordCount == 0 || wordCount > 1 ? $"{wordCount} words" : "1 word";
         }
-        #endregion
 
         private void TextChanged_CharacterCount(object sender, EventArgs e)
         {
@@ -522,5 +525,29 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
             labelCharCount.Text = charCount == 0 || charCount > 1 ? $"{charCount} characters" : "1 character";
         }
 
+        private void TextChanged_CheckSpelling(object sender, EventArgs e)
+        {
+            string[] words = Regex.Split(textBoxEditor.Text, @"\W+");
+
+            foreach (string word in words)
+            {
+                if (!hunspell.Spell(word))
+                {
+                    MessageBox.Show($"Misspelled word: {word}");
+                }
+            }
+        }
+        #endregion
     } // close form
+
+    public class MagicSpellBox : RichTextBox
+    {
+        // Override the OnPaint event
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            // Perform custom drawing here
+            base.OnPaint(e);
+        }
+    }
+
 } // close main

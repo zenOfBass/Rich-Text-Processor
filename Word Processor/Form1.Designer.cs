@@ -260,7 +260,7 @@
             this.textBoxEditor.Size = new System.Drawing.Size(954, 640);
             this.textBoxEditor.TabIndex = 4;
             this.textBoxEditor.Text = "";
-            this.textBoxEditor.TextChanged += new System.EventHandler(this.TextChanged);
+            this.textBoxEditor.TextChanged += new System.EventHandler(this.TextChanged_Triggers);
             // 
             // menuStrip1
             // 
