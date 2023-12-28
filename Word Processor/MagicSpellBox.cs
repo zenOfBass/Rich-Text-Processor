@@ -18,11 +18,11 @@ namespace Rich_Text_Processor
                 "System.ComponentModel.Design.Serialization.CodeDomSerializer, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
     public class MagicSpellBox : ElementHost
     {
-        private readonly System.Windows.Controls.RichTextBox box;
+        private readonly RichTextBox box;
 
         public MagicSpellBox()
         {
-            box = new System.Windows.Controls.RichTextBox();
+            box = new RichTextBox();
             base.Child = box;
             box.IsReadOnly = false;
             box.TextChanged += (s, e) => OnTextChanged(EventArgs.Empty);
@@ -71,7 +71,7 @@ namespace Rich_Text_Processor
             set;
         }
 
-        public System.Windows.Controls.RichTextBox Box => box;
+        public RichTextBox Box => box;
 
         public void SelectAll() => box.SelectAll();
 
@@ -172,6 +172,16 @@ namespace Rich_Text_Processor
             if (paragraph != null)
             {
                 paragraph.TextAlignment = alignment;
+            }
+        }
+
+        public void ApplySelectionForeground(System.Drawing.Color color)
+        {
+            if (box.Selection != null)
+            {
+                // Assuming box is your RichTextBox control
+                var selectionRange = new TextRange(box.Selection.Start, box.Selection.End);
+                selectionRange.ApplyPropertyValue(TextElement.ForegroundProperty, new SolidColorBrush(color.ToMediaColor()));
             }
         }
     }

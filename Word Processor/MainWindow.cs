@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Forms;
+using System.Windows.Media;
 
 namespace Rich_Text_Processor // this program will be a word processor based around the rich text box
 { // open namespace
@@ -450,9 +451,11 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
             try
             {
                 colorDialog.Color = magicSpellBox.ForeColor;
+
                 if (colorDialog.ShowDialog() == DialogResult.OK)
                 {
-                    magicSpellBox.SetSelectionColor(colorDialog.Color.ToMediaColor());
+                    // Apply the color to the current selection if possible
+                    magicSpellBox.ApplySelectionForeground(colorDialog.Color);
                 }
             }
             catch
@@ -469,7 +472,7 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
 
                 if (selection != null && !selection.IsEmpty)
                 {
-                    var currentFont = new FontFamily(selection.GetPropertyValue(TextElement.FontFamilyProperty).ToString());
+                    var currentFont = new System.Drawing.FontFamily(selection.GetPropertyValue(TextElement.FontFamilyProperty).ToString());
                     var currentSize = selection.GetPropertyValue(TextElement.FontSizeProperty);
                     var currentWeight = selection.GetPropertyValue(TextElement.FontWeightProperty);
 
@@ -492,7 +495,7 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
 
                 if (selection != null && !selection.IsEmpty)
                 {
-                    var currentFont = new FontFamily(selection.GetPropertyValue(TextElement.FontFamilyProperty).ToString());
+                    var currentFont = new System.Drawing.FontFamily(selection.GetPropertyValue(TextElement.FontFamilyProperty).ToString());
                     var currentSize = selection.GetPropertyValue(TextElement.FontSizeProperty);
                     var currentStyle = selection.GetPropertyValue(TextElement.FontStyleProperty);
 
