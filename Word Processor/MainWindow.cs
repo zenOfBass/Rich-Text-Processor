@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Media;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Media;
 
 namespace Rich_Text_Processor // this program will be a word processor based around the rich text box
 { // open namespace
