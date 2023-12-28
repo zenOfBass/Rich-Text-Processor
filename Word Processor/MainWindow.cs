@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
@@ -526,7 +527,6 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
             }
         }
 
-
         private void ButtonAlignLeft_Click(object sender, EventArgs e)
         {
             try
@@ -571,44 +571,32 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
 
         private void ButtonBullets_Click(object sender, EventArgs e)
         {
-            var paragraph = magicSpellBox.Box.Selection.Start.Paragraph;
+            // Get the current selection
+            TextRange selection = new TextRange(magicSpellBox.Box.Selection.Start, magicSpellBox.Box.Selection.End);
 
-            if (paragraph != null)
+            // Check if the selection is empty
+            if (!selection.IsEmpty)
             {
-                // Toggle bullets
-                if (paragraph.Parent is ListItem)
-                {
-                    // If the paragraph is inside a ListItem, remove bullets
-                    var listItem = paragraph.Parent as ListItem;
-                    var listItemParagraph = listItem.Blocks.FirstBlock as Paragraph;
+                // Split the selected text into lines
+                string[] lines = selection.Text.Split('\n');
 
-                    var listItemContainer = listItemParagraph.Parent as ListItem;
-                    if (listItemContainer != null)
-                    {
-                        listItemContainer.Blocks.Remove(listItemParagraph);
-                        // Remove the ListItem if there are no more paragraphs
-                        if (!listItemContainer.Blocks.Any())
-                        {
-                            var list = listItemContainer.Parent as List;
-                            if (list != null)
-                            {
-                                list.ListItems.Remove(listItemContainer);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    // If no bullets, add them
-                    var list = new List();
-                    var listItem = new ListItem(new Paragraph(new Run("")));
+                // Clear the existing selection
+                selection.Text = "";
 
-                    if (paragraph.Parent is Section)
+                // Insert a bullet point at the beginning of each line
+                foreach (string line in lines)
+                {
+                    // Check if the line is not empty
+                    if (!string.IsNullOrWhiteSpace(line))
                     {
-                        var section = paragraph.Parent as Section;
-                        list.ListItems.Add(listItem);
-                        section.Blocks.InsertAfter(list, paragraph);
+                        magicSpellBox.Box.CaretPosition.InsertTextInRun("\u2022 " + line.Trim());
+
+                        // Move the caret to the end of the inserted text
+                        magicSpellBox.Box.CaretPosition = magicSpellBox.Box.CaretPosition.GetPositionAtOffset(4 + line.Trim().Length);
                     }
+
+                    // Insert a newline after each line
+                    magicSpellBox.Box.CaretPosition.InsertParagraphBreak();
                 }
             }
         }

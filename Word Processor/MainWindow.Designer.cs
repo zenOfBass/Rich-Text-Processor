@@ -408,7 +408,7 @@
             this.magicSpellBox.SelectionFont = new System.Drawing.Font("Microsoft Sans Serif", 13.33333F);
             this.magicSpellBox.Size = new System.Drawing.Size(954, 634);
             this.magicSpellBox.TabIndex = 7;
-            this.magicSpellBox.Text = "\r\n\r\n";
+            this.magicSpellBox.Text = "";
             // 
             // MainWindow
             // 
