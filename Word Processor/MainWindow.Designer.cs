@@ -71,6 +71,7 @@
             this.previewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.printToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.magicSpellBox = new Rich_Text_Processor.MagicSpellBox();
+            this.magicSpellBox.TextChanged += TextChanged;
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();

@@ -465,12 +465,17 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         {
             try
             {
-                if (magicSpellBox.SelectionFont != null)
+                var selection = magicSpellBox.Box.Selection;
+
+                if (selection != null && !selection.IsEmpty)
                 {
-                    Font currentFont = magicSpellBox.SelectionFont;
-                    System.Drawing.FontStyle newFontStyle;
-                    newFontStyle = magicSpellBox.SelectionFont.Style ^ System.Drawing.FontStyle.Bold;
-                    magicSpellBox.SelectionFont = new Font(currentFont.FontFamily, currentFont.Size, newFontStyle);
+                    var currentFont = new FontFamily(selection.GetPropertyValue(TextElement.FontFamilyProperty).ToString());
+                    var currentSize = selection.GetPropertyValue(TextElement.FontSizeProperty);
+                    var currentWeight = selection.GetPropertyValue(TextElement.FontWeightProperty);
+
+                    FontWeight newWeight = (currentWeight != null && currentWeight.Equals(FontWeights.Bold)) ? FontWeights.Normal : FontWeights.Bold;
+
+                    magicSpellBox.Box.Selection.ApplyPropertyValue(TextElement.FontWeightProperty, newWeight);
                 }
             }
             catch
@@ -483,12 +488,17 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         {
             try
             {
-                if (magicSpellBox.SelectionFont != null)
+                var selection = magicSpellBox.Box.Selection;
+
+                if (selection != null && !selection.IsEmpty)
                 {
-                    Font currentFont = magicSpellBox.SelectionFont;
-                    System.Drawing.FontStyle newFontStyle;
-                    newFontStyle = magicSpellBox.SelectionFont.Style ^ System.Drawing.FontStyle.Italic;
-                    magicSpellBox.SelectionFont = new Font(currentFont.FontFamily, currentFont.Size, newFontStyle);
+                    var currentFont = new FontFamily(selection.GetPropertyValue(TextElement.FontFamilyProperty).ToString());
+                    var currentSize = selection.GetPropertyValue(TextElement.FontSizeProperty);
+                    var currentStyle = selection.GetPropertyValue(TextElement.FontStyleProperty);
+
+                    System.Windows.FontStyle newStyle = (currentStyle != null && currentStyle.Equals(FontStyles.Italic)) ? FontStyles.Normal : FontStyles.Italic;
+
+                    magicSpellBox.Box.Selection.ApplyPropertyValue(TextElement.FontStyleProperty, newStyle);
                 }
             }
             catch
@@ -503,10 +513,8 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
             {
                 if (magicSpellBox.SelectionFont != null)
                 {
-                    Font currentFont = magicSpellBox.SelectionFont;
-                    System.Drawing.FontStyle newFontStyle;
-                    newFontStyle = magicSpellBox.SelectionFont.Style ^ System.Drawing.FontStyle.Underline;
-                    magicSpellBox.SelectionFont = new Font(currentFont.FontFamily, currentFont.Size, newFontStyle);
+                    TextRange selectedText = new TextRange(magicSpellBox.Box.Selection.Start, magicSpellBox.Box.Selection.End);
+                    selectedText.ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Underline);
                 }
             }
             catch
@@ -514,6 +522,7 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
                 SystemSounds.Hand.Play();
             }
         }
+
 
         private void ButtonAlignLeft_Click(object sender, EventArgs e)
         {
@@ -640,16 +649,27 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
             TextChanged_WordCount(sender, e);
             TextChanged_CharacterCount(sender, e);
         }
+
         private void TextChanged_WordCount(object sender, EventArgs e)
         {
-            string[] words = Regex.Split(magicSpellBox.Text, @"\W+");
+            string text = magicSpellBox.Text.Trim();
+
+            // Check if the text is empty
+            if (string.IsNullOrEmpty(text))
+            {
+                labelWordCount.Text = "0 words";
+                return;
+            }
+
+            string[] words = text.Split(new char[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             int wordCount = words.Length;
-            labelWordCount.Text = wordCount == 0 || wordCount > 1 ? $"{wordCount} words" : "1 word";
+            labelWordCount.Text = wordCount > 1 ? $"{wordCount} words" : "1 word";
         }
+
         private void TextChanged_CharacterCount(object sender, EventArgs e)
         {
-            int charCount = magicSpellBox.Text.Length;
-            labelCharCount.Text = charCount == 0 || charCount > 1 ? $"{charCount} characters" : "1 character";
+            int charCount = magicSpellBox.Text.Count(c => !char.IsWhiteSpace(c));
+            labelCharCount.Text = charCount > 0 ? $"{charCount} characters" : "0 character";
         }
 
         #endregion
