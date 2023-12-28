@@ -101,7 +101,7 @@ namespace Rich_Text_Processor
 
         public Font SelectionFont
         {
-            get { return ConvertToFont(box.Selection.GetPropertyValue(System.Windows.Controls.RichTextBox.FontFamilyProperty), box.Selection.GetPropertyValue(System.Windows.Controls.RichTextBox.FontSizeProperty)); }
+            get { return ConvertToFont(box.Selection.GetPropertyValue(Control.FontFamilyProperty), box.Selection.GetPropertyValue(Control.FontSizeProperty)); }
             set { ApplyFont(value); }
         }
 
@@ -169,17 +169,13 @@ namespace Rich_Text_Processor
         public void SetAlignment(TextAlignment alignment)
         {
             var paragraph = box.Selection.Start.Paragraph;
-            if (paragraph != null)
-            {
-                paragraph.TextAlignment = alignment;
-            }
+            if (paragraph != null) paragraph.TextAlignment = alignment;
         }
 
         public void ApplySelectionForeground(System.Drawing.Color color)
         {
             if (box.Selection != null)
             {
-                // Assuming box is your RichTextBox control
                 var selectionRange = new TextRange(box.Selection.Start, box.Selection.End);
                 selectionRange.ApplyPropertyValue(TextElement.ForegroundProperty, new SolidColorBrush(color.ToMediaColor()));
             }

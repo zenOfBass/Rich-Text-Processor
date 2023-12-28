@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Forms;
 
-namespace Rich_Text_Processor // this program will be a word processor based around the rich text box
+namespace Rich_Text_Processor
 { // open namespace
     public partial class MainWindow : Form
     { // open class
@@ -27,7 +27,10 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
                 if (magicSpellBox.Modified == true)
                 {
                     DialogResult answer;
-                    answer = System.Windows.Forms.MessageBox.Show("Save current document before creating new document?", "Unsaved Document", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    answer = System.Windows.Forms.MessageBox.Show("Save current document before creating new document?",
+                                                                "Unsaved Document",
+                                                                MessageBoxButtons.YesNo,
+                                                                MessageBoxIcon.Question);
                     if (answer == DialogResult.No)
                     {
                         currentFile = "";
@@ -68,7 +71,10 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
                 if (magicSpellBox.Modified == true)
                 {
                     DialogResult answer;
-                    answer = System.Windows.Forms.MessageBox.Show("Save current file before opening another document?", "Unsaved Document", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    answer = System.Windows.Forms.MessageBox.Show("Save current file before opening another document?",
+                                                                "Unsaved Document",
+                                                                MessageBoxButtons.YesNo,
+                                                                MessageBoxIcon.Question);
                     if (answer == DialogResult.No)
                     {
                         magicSpellBox.Modified = false;
@@ -239,7 +245,10 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
                 if (magicSpellBox.Modified == true)
                 {
                     DialogResult answer;
-                    answer = System.Windows.Forms.MessageBox.Show("Save this document before closing?", "Unsaved Document", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    answer = System.Windows.Forms.MessageBox.Show("Save this document before closing?",
+                                                                "Unsaved Document",
+                                                                MessageBoxButtons.YesNo,
+                                                                MessageBoxIcon.Question);
                     if (answer == DialogResult.Yes) return;
                     else
                     {
@@ -271,7 +280,10 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
             }
             catch (Exception)
             {
-                System.Windows.Forms.MessageBox.Show("Unable to select all document content.", "RTE - Select", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Windows.Forms.MessageBox.Show("Unable to select all document content.",
+                                                    "RTE - Select",
+                                                    MessageBoxButtons.OK,
+                                                    MessageBoxIcon.Error);
             }
         }
 
@@ -283,7 +295,10 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
             }
             catch (Exception)
             {
-                System.Windows.Forms.MessageBox.Show("Unable to copy document content.", "RTE - Copy", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Windows.Forms.MessageBox.Show("Unable to copy document content.",
+                                                    "RTE - Copy",
+                                                    MessageBoxButtons.OK,
+                                                    MessageBoxIcon.Error);
             }
         }
 
@@ -295,7 +310,10 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
             }
             catch
             {
-                System.Windows.Forms.MessageBox.Show("Unable to cut document content.", "RTE - Cut", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Windows.Forms.MessageBox.Show("Unable to cut document content.",
+                                                    "RTE - Cut",
+                                                    MessageBoxButtons.OK,
+                                                    MessageBoxIcon.Error);
             }
         }
 
@@ -307,7 +325,10 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
             }
             catch
             {
-                System.Windows.Forms.MessageBox.Show("Unable to copy clipboard content to document.", "RTE - Paste", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Windows.Forms.MessageBox.Show("Unable to copy clipboard content to document.",
+                                                    "RTE - Paste",
+                                                    MessageBoxButtons.OK,
+                                                    MessageBoxIcon.Error);
             }
         }
 
@@ -399,7 +420,7 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
         {
             int x = e.MarginBounds.Left;
             int y = e.MarginBounds.Top;
-            System.Drawing.Brush brush = new SolidBrush(magicSpellBox.ForeColor);
+            Brush brush = new SolidBrush(magicSpellBox.ForeColor);
 
             while (linesPrinted < lines.Length)
             {
@@ -470,7 +491,7 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
 
                 if (selection != null && !selection.IsEmpty)
                 {
-                    var currentFont = new System.Drawing.FontFamily(selection.GetPropertyValue(TextElement.FontFamilyProperty).ToString());
+                    var currentFont = new FontFamily(selection.GetPropertyValue(TextElement.FontFamilyProperty).ToString());
                     var currentSize = selection.GetPropertyValue(TextElement.FontSizeProperty);
                     var currentWeight = selection.GetPropertyValue(TextElement.FontWeightProperty);
 
@@ -493,7 +514,7 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
 
                 if (selection != null && !selection.IsEmpty)
                 {
-                    var currentFont = new System.Drawing.FontFamily(selection.GetPropertyValue(TextElement.FontFamilyProperty).ToString());
+                    var currentFont = new FontFamily(selection.GetPropertyValue(TextElement.FontFamilyProperty).ToString());
                     var currentSize = selection.GetPropertyValue(TextElement.FontSizeProperty);
                     var currentStyle = selection.GetPropertyValue(TextElement.FontStyleProperty);
 
@@ -609,7 +630,10 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
                 if (magicSpellBox.Modified == true)
                 {
                     DialogResult answer;
-                    answer = System.Windows.Forms.MessageBox.Show("Save current document before exiting?", "Unsaved Document", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    answer = System.Windows.Forms.MessageBox.Show("Save current document before exiting?",
+                                                                "Unsaved Document",
+                                                                MessageBoxButtons.YesNo,
+                                                                MessageBoxIcon.Question);
                     if (answer == DialogResult.No)
                     {
                         magicSpellBox.Modified = false;
@@ -628,7 +652,7 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
             }
         }
 
-        #endregion
+        #endregion // end form closing handler
 
         #region Word and Character Count
 
@@ -656,11 +680,19 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
 
         private void TextChanged_CharacterCount(object sender, EventArgs e)
         {
+            string text = magicSpellBox.Text;
+
+            if (string.IsNullOrEmpty(text))
+            {
+                labelWordCount.Text = "0 characters";
+                return;
+            }
+
             int charCount = magicSpellBox.Text.Count(c => !char.IsWhiteSpace(c));
-            labelCharCount.Text = charCount > 0 ? $"{charCount} characters" : "0 character";
+            labelCharCount.Text = charCount > 1 ? $"{charCount} characters" : "1 characters";
         }
 
-        #endregion
+        #endregion // end word and character count
 
     } // close class
 } // close namespace
