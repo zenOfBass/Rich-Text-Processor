@@ -10,9 +10,9 @@ using System.Windows.Documents;
 using System.Windows.Forms;
 
 namespace Rich_Text_Processor // this program will be a word processor based around the rich text box
-{ // open main
+{ // open namespace
     public partial class MainWindow : Form
-    { // open form
+    { // open class
         public MainWindow() => InitializeComponent();
 
         private string currentFile;
@@ -654,5 +654,5 @@ namespace Rich_Text_Processor // this program will be a word processor based aro
 
         #endregion
 
-    } // close form
-} // close main
+    } // close class
+} // close namespace
