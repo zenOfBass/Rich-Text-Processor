@@ -1,6 +1,6 @@
 ﻿namespace Rich_Text_Processor
 {
-    partial class Form1
+    partial class MainWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
@@ -52,7 +52,7 @@
             this.fontDialog = new System.Windows.Forms.FontDialog();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.labelWordCount = new System.Windows.Forms.ToolStripStatusLabel();
-            this.textBoxEditor = new System.Windows.Forms.RichTextBox();
+            this.labelCharCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -70,7 +70,7 @@
             this.pageSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.previewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.printToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.labelCharCount = new System.Windows.Forms.ToolStripStatusLabel();
+            this.magicSpellBox = new Rich_Text_Processor.MagicSpellBox();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -96,9 +96,9 @@
             this.buttonAlignRight,
             this.toolStripSeparator3,
             this.toolStripButton4});
-            this.toolStrip.Location = new System.Drawing.Point(0, 28);
+            this.toolStrip.Location = new System.Drawing.Point(0, 30);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(954, 27);
+            this.toolStrip.Size = new System.Drawing.Size(954, 31);
             this.toolStrip.TabIndex = 2;
             this.toolStrip.Text = "toolStrip";
             // 
@@ -109,7 +109,7 @@
             this.buttonBold.Image = global::Word_Processor.Properties.Resources.bold;
             this.buttonBold.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonBold.Name = "buttonBold";
-            this.buttonBold.Size = new System.Drawing.Size(29, 24);
+            this.buttonBold.Size = new System.Drawing.Size(29, 28);
             this.buttonBold.Text = "Bold";
             this.buttonBold.CheckedChanged += new System.EventHandler(this.ButtonBold_Click);
             // 
@@ -120,7 +120,7 @@
             this.buttonItalic.Image = global::Word_Processor.Properties.Resources.italic;
             this.buttonItalic.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonItalic.Name = "buttonItalic";
-            this.buttonItalic.Size = new System.Drawing.Size(29, 24);
+            this.buttonItalic.Size = new System.Drawing.Size(29, 28);
             this.buttonItalic.Text = "Italic";
             this.buttonItalic.CheckedChanged += new System.EventHandler(this.ButtonItalic_Click);
             // 
@@ -131,14 +131,14 @@
             this.buttonUnderline.Image = global::Word_Processor.Properties.Resources.underline;
             this.buttonUnderline.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonUnderline.Name = "buttonUnderline";
-            this.buttonUnderline.Size = new System.Drawing.Size(29, 24);
+            this.buttonUnderline.Size = new System.Drawing.Size(29, 28);
             this.buttonUnderline.Text = "Underline";
             this.buttonUnderline.CheckedChanged += new System.EventHandler(this.ButtonUnderline_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 31);
             // 
             // buttonFontSelect
             // 
@@ -146,7 +146,7 @@
             this.buttonFontSelect.Image = global::Word_Processor.Properties.Resources.font_size;
             this.buttonFontSelect.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonFontSelect.Name = "buttonFontSelect";
-            this.buttonFontSelect.Size = new System.Drawing.Size(29, 24);
+            this.buttonFontSelect.Size = new System.Drawing.Size(29, 28);
             this.buttonFontSelect.Text = "Font Selection";
             this.buttonFontSelect.Click += new System.EventHandler(this.ButtonFontSelect_Click);
             // 
@@ -156,14 +156,14 @@
             this.buttonFontColor.Image = global::Word_Processor.Properties.Resources.font_color;
             this.buttonFontColor.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonFontColor.Name = "buttonFontColor";
-            this.buttonFontColor.Size = new System.Drawing.Size(29, 24);
+            this.buttonFontColor.Size = new System.Drawing.Size(29, 28);
             this.buttonFontColor.Text = "Font Color";
             this.buttonFontColor.Click += new System.EventHandler(this.ButtonFontColor_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 31);
             // 
             // buttonAlignLeft
             // 
@@ -171,7 +171,7 @@
             this.buttonAlignLeft.Image = global::Word_Processor.Properties.Resources.align_left;
             this.buttonAlignLeft.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonAlignLeft.Name = "buttonAlignLeft";
-            this.buttonAlignLeft.Size = new System.Drawing.Size(29, 24);
+            this.buttonAlignLeft.Size = new System.Drawing.Size(29, 28);
             this.buttonAlignLeft.Text = "Align Left";
             this.buttonAlignLeft.Click += new System.EventHandler(this.ButtonAlignLeft_Click);
             // 
@@ -181,7 +181,7 @@
             this.buttonAlignCenter.Image = global::Word_Processor.Properties.Resources.align_center;
             this.buttonAlignCenter.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonAlignCenter.Name = "buttonAlignCenter";
-            this.buttonAlignCenter.Size = new System.Drawing.Size(29, 24);
+            this.buttonAlignCenter.Size = new System.Drawing.Size(29, 28);
             this.buttonAlignCenter.Text = "Center";
             this.buttonAlignCenter.Click += new System.EventHandler(this.ButtonAlignCenter_Click);
             // 
@@ -191,14 +191,14 @@
             this.buttonAlignRight.Image = global::Word_Processor.Properties.Resources.align_right;
             this.buttonAlignRight.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonAlignRight.Name = "buttonAlignRight";
-            this.buttonAlignRight.Size = new System.Drawing.Size(29, 24);
+            this.buttonAlignRight.Size = new System.Drawing.Size(29, 28);
             this.buttonAlignRight.Text = "Align Right";
             this.buttonAlignRight.Click += new System.EventHandler(this.ButtonAlignRight_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 27);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 31);
             // 
             // toolStripButton4
             // 
@@ -206,7 +206,7 @@
             this.toolStripButton4.Image = global::Word_Processor.Properties.Resources.list_check;
             this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(29, 24);
+            this.toolStripButton4.Size = new System.Drawing.Size(29, 28);
             this.toolStripButton4.Text = "Bulleted List";
             this.toolStripButton4.Click += new System.EventHandler(this.ButtonBullets_Click);
             // 
@@ -252,15 +252,11 @@
             this.labelWordCount.Text = "0 words";
             this.labelWordCount.ToolTipText = "Total Word Count";
             // 
-            // textBoxEditor
+            // labelCharCount
             // 
-            this.textBoxEditor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxEditor.Location = new System.Drawing.Point(0, 55);
-            this.textBoxEditor.Name = "textBoxEditor";
-            this.textBoxEditor.Size = new System.Drawing.Size(954, 640);
-            this.textBoxEditor.TabIndex = 4;
-            this.textBoxEditor.Text = "";
-            this.textBoxEditor.TextChanged += new System.EventHandler(this.TextChanged);
+            this.labelCharCount.Name = "labelCharCount";
+            this.labelCharCount.Size = new System.Drawing.Size(88, 20);
+            this.labelCharCount.Text = "0 characters";
             // 
             // menuStrip1
             // 
@@ -271,7 +267,7 @@
             this.publishToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(954, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(954, 30);
             this.menuStrip1.TabIndex = 6;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -283,7 +279,7 @@
             this.saveToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 26);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // newToolStripMenuItem
@@ -324,7 +320,7 @@
             this.cutToolStripMenuItem,
             this.pasteToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(49, 24);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(49, 26);
             this.editToolStripMenuItem.Text = "Edit";
             // 
             // undoToolStripMenuItem
@@ -376,7 +372,7 @@
             this.previewToolStripMenuItem,
             this.printToolStripMenuItem});
             this.publishToolStripMenuItem.Name = "publishToolStripMenuItem";
-            this.publishToolStripMenuItem.Size = new System.Drawing.Size(70, 24);
+            this.publishToolStripMenuItem.Size = new System.Drawing.Size(70, 26);
             this.publishToolStripMenuItem.Text = "Publish";
             // 
             // pageSetupToolStripMenuItem
@@ -400,23 +396,30 @@
             this.printToolStripMenuItem.Text = "Print";
             this.printToolStripMenuItem.Click += new System.EventHandler(this.PrintToolStripMenuItem_Click);
             // 
-            // labelCharCount
+            // magicSpellBox
             // 
-            this.labelCharCount.Name = "labelCharCount";
-            this.labelCharCount.Size = new System.Drawing.Size(88, 20);
-            this.labelCharCount.Text = "0 characters";
+            this.magicSpellBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.magicSpellBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.magicSpellBox.Location = new System.Drawing.Point(0, 61);
+            this.magicSpellBox.Modified = false;
+            this.magicSpellBox.Multiline = true;
+            this.magicSpellBox.Name = "magicSpellBox";
+            this.magicSpellBox.SelectionFont = new System.Drawing.Font("Microsoft Sans Serif", 13.33333F);
+            this.magicSpellBox.Size = new System.Drawing.Size(954, 634);
+            this.magicSpellBox.TabIndex = 7;
+            this.magicSpellBox.Text = "\r\n\r\n";
             // 
-            // Form1
+            // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(954, 721);
-            this.Controls.Add(this.textBoxEditor);
+            this.Controls.Add(this.magicSpellBox);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
+            this.Name = "MainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Rich Text Processor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
@@ -455,7 +458,6 @@
         private System.Windows.Forms.ToolStripButton toolStripButton4;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel labelWordCount;
-        private System.Windows.Forms.RichTextBox textBoxEditor;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
@@ -474,6 +476,7 @@
         private System.Windows.Forms.ToolStripMenuItem previewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem printToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel labelCharCount;
+        private MagicSpellBox magicSpellBox;
     }
 }
 

@@ -1,0 +1,658 @@
+﻿using System;
+using System.Drawing;
+using System.Drawing.Printing;
+using System.IO;
+using System.Linq;
+using System.Media;
+using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Documents;
+using System.Windows.Forms;
+
+namespace Rich_Text_Processor // this program will be a word processor based around the rich text box
+{ // open main
+    public partial class MainWindow : Form
+    { // open form
+        public MainWindow() => InitializeComponent();
+
+        private string currentFile;
+        private int linesPrinted;
+        private string[] lines;
+
+        #region File Menu Methods
+
+        private void NewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (magicSpellBox.Modified == true)
+                {
+                    DialogResult answer;
+                    answer = System.Windows.Forms.MessageBox.Show("Save current document before creating new document?", "Unsaved Document", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (answer == DialogResult.No)
+                    {
+                        currentFile = "";
+                        Text = "Editor: New Document";
+                        magicSpellBox.Modified = false;
+                        magicSpellBox.ResetText();
+                        return;
+                    }
+                    else
+                    {
+                        SaveToolStripMenuItem_Click(this, new EventArgs());
+                        magicSpellBox.Modified = false;
+                        magicSpellBox.ResetText();
+                        currentFile = "";
+                        Text = "Editor: New Document";
+                        return;
+                    }
+                }
+                else
+                {
+                    currentFile = "";
+                    Text = "Editor: New Document";
+                    magicSpellBox.Modified = false;
+                    magicSpellBox.ResetText();
+                    return;
+                }
+            }
+            catch
+            {
+                SystemSounds.Hand.Play();
+            }
+        }
+
+        private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (magicSpellBox.Modified == true)
+                {
+                    DialogResult answer;
+                    answer = System.Windows.Forms.MessageBox.Show("Save current file before opening another document?", "Unsaved Document", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (answer == DialogResult.No)
+                    {
+                        magicSpellBox.Modified = false;
+                        OpenFile();
+                    }
+                    else
+                    {
+                        SaveToolStripMenuItem_Click(this, new EventArgs());
+                        OpenFile();
+                    }
+                }
+                else
+                {
+                    OpenFile();
+                }
+            }
+            catch
+            {
+                SystemSounds.Hand.Play();
+            }
+        }
+
+        private void OpenFile()
+        {
+            try
+            {
+                openFileDialog.Title = "RTP - Open File";
+                openFileDialog.DefaultExt = "rtf";
+                openFileDialog.Filter = "Rich Text Files|*.rtf|Text Files|*.txt|HTML Files|*.htm|All Files|*.*";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.FileName = string.Empty;
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    if (openFileDialog.FileName == "") return;
+                    string strExt;
+                    strExt = Path.GetExtension(openFileDialog.FileName);
+                    strExt = strExt.ToUpper();
+                    if (strExt == ".RTF")
+                    {
+                        // Load RTF content into the MagicSpellBox
+                        var textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);
+                        using (var fs = new FileStream(openFileDialog.FileName, FileMode.Open))
+                        {
+                            textRange.Load(fs, System.Windows.Forms.DataFormats.Rtf);
+                        }
+                    }
+                    else
+                    {
+                        StreamReader txtReader;
+                        txtReader = new StreamReader(openFileDialog.FileName);
+                        magicSpellBox.Text = txtReader.ReadToEnd();
+                        txtReader.Close();
+                        txtReader = null;
+
+                        // Set the selection range to the entire text
+                        TextRange textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);
+                        magicSpellBox.Box.Selection.Select(textRange.Start, textRange.End);
+                    }
+                    currentFile = openFileDialog.FileName;
+                    magicSpellBox.Modified = false;
+                    Text = "Editor: " + currentFile.ToString();
+                }
+                else System.Windows.Forms.MessageBox.Show("Open File request cancelled by user.", "Cancelled");
+            }
+            catch
+            {
+                SystemSounds.Hand.Play();
+            }
+        }
+
+        private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                saveFileDialog.Title = "RTP - Save File";
+                saveFileDialog.DefaultExt = "rtf";
+                saveFileDialog.Filter = "Rich Text Files|*.rtf|Text Files|*.txt|HTML Files|*.htm|All Files|*.*";
+                saveFileDialog.FilterIndex = 1;
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    if (saveFileDialog.FileName == "") return;
+                    string strExt;
+                    strExt = Path.GetExtension(saveFileDialog.FileName);
+                    strExt = strExt.ToUpper();
+                    if (strExt == ".RTF")
+                    {
+                        // Save RTF content from MagicSpellBox
+                        var textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);
+                        using (var fs = new FileStream(saveFileDialog.FileName, FileMode.Create))
+                        {
+                            textRange.Save(fs, System.Windows.Forms.DataFormats.Rtf);
+                        }
+                    }
+                    else
+                    {
+                        // Save plain text content from MagicSpellBox
+                        StreamWriter txtWriter;
+                        txtWriter = new StreamWriter(saveFileDialog.FileName);
+                        txtWriter.Write(magicSpellBox.Text);
+                        txtWriter.Close();
+                        txtWriter = null;
+                        magicSpellBox.Box.Selection.Select(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentStart);
+                    }
+                    currentFile = saveFileDialog.FileName;
+                    magicSpellBox.Modified = false;
+                    Text = "Editor: " + currentFile.ToString();
+                    System.Windows.Forms.MessageBox.Show(currentFile.ToString() + " saved.", "File Save");
+                }
+                else System.Windows.Forms.MessageBox.Show("Save File request cancelled by user.", "Cancelled");
+            }
+            catch
+            {
+                SystemSounds.Hand.Play();
+            }
+        }
+
+        private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                saveFileDialog.Title = "RTP - Save File";
+                saveFileDialog.DefaultExt = "rtf";
+                saveFileDialog.Filter = "Rich Text Files|*.rtf|Text Files|*.txt|HTML Files|*.htm|All Files|*.*";
+                saveFileDialog.FilterIndex = 1;
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    if (saveFileDialog.FileName == "") return;
+                    string strExt;
+                    strExt = Path.GetExtension(saveFileDialog.FileName);
+                    strExt = strExt.ToUpper();
+                    if (strExt == ".RTF")
+                    {
+                        // Save RTF content from the MagicSpellBox
+                        var textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);
+                        using (var fs = new FileStream(saveFileDialog.FileName, FileMode.Create))
+                        {
+                            textRange.Save(fs, System.Windows.Forms.DataFormats.Rtf);
+                        }
+                    }
+                    else
+                    {
+                        // Save plain text content from the MagicSpellBox
+                        using (var txtWriter = new StreamWriter(saveFileDialog.FileName))
+                        {
+                            txtWriter.Write(new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd).Text);
+                        }
+                    }
+
+                    // Clear the selection
+                    magicSpellBox.Box.Selection.Select(magicSpellBox.Box.Document.ContentEnd, magicSpellBox.Box.Document.ContentEnd);
+                    currentFile = saveFileDialog.FileName;
+                    magicSpellBox.Modified = false;
+                    Text = "Editor: " + currentFile.ToString();
+                    System.Windows.Forms.MessageBox.Show(currentFile.ToString() + " saved.", "File Save");
+                }
+                else System.Windows.Forms.MessageBox.Show("Save File request cancelled by user.", "Cancelled");
+            }
+            catch
+            {
+                SystemSounds.Hand.Play();
+            }
+        }
+
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (magicSpellBox.Modified == true)
+                {
+                    DialogResult answer;
+                    answer = System.Windows.Forms.MessageBox.Show("Save this document before closing?", "Unsaved Document", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (answer == DialogResult.Yes) return;
+                    else
+                    {
+                        magicSpellBox.Modified = false;
+                        System.Windows.Forms.Application.Exit();
+                    }
+                }
+                else
+                {
+                    magicSpellBox.Modified = false;
+                    System.Windows.Forms.Application.Exit();
+                }
+            }
+            catch
+            {
+                SystemSounds.Hand.Play();
+            }
+        }
+
+        #endregion
+
+        #region Edit Menu Methods
+
+        private void SelectAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                magicSpellBox.SelectAll();
+            }
+            catch (Exception)
+            {
+                System.Windows.Forms.MessageBox.Show("Unable to select all document content.", "RTE - Select", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void CopyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                magicSpellBox.Copy();
+            }
+            catch (Exception)
+            {
+                System.Windows.Forms.MessageBox.Show("Unable to copy document content.", "RTE - Copy", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void CutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                magicSpellBox.Cut();
+            }
+            catch
+            {
+                System.Windows.Forms.MessageBox.Show("Unable to cut document content.", "RTE - Cut", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void PasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                magicSpellBox.Paste();
+            }
+            catch
+            {
+                System.Windows.Forms.MessageBox.Show("Unable to copy clipboard content to document.", "RTE - Paste", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void UndoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (magicSpellBox.CanUndo)
+                {
+                    magicSpellBox.Undo();
+                }
+            }
+            catch
+            {
+                SystemSounds.Hand.Play();
+            }
+        }
+
+        private void RedoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (magicSpellBox.CanRedo) magicSpellBox.Redo();
+            }
+            catch
+            {
+                SystemSounds.Hand.Play();
+            }
+        }
+
+        #endregion // end of edit menu
+
+        #region Publish Menu Methods
+
+        private void PreviewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                printPreviewDialog.Document = printDocument;
+                printPreviewDialog.ShowDialog();
+            }
+            catch
+            {
+                SystemSounds.Hand.Play();
+            }
+        }
+
+        private void PrintToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                printDialog.Document = printDocument;
+                if (printDialog.ShowDialog() == DialogResult.OK) printDocument.Print();
+            }
+            catch
+            {
+                SystemSounds.Hand.Play();
+            }
+        }
+
+        private void PageSetupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                pageSetupDialog.Document = printDocument;
+                pageSetupDialog.ShowDialog();
+            }
+            catch
+            {
+                SystemSounds.Hand.Play();
+            }
+        }
+
+        private void PrintDocument_BeginPrint(object sender, PrintEventArgs e)
+        {
+            char[] param = { '\n' };
+
+            if (printDialog.PrinterSettings.PrintRange == PrintRange.Selection) lines = magicSpellBox.SelectedText.Split(param);
+            else lines = magicSpellBox.Text.Split(param);
+            int i = 0;
+            char[] trimParam = { '\r' };
+            foreach (string s in lines)
+            {
+                lines[i++] = s.TrimEnd(trimParam);
+            }
+        }
+
+        private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
+        {
+            int x = e.MarginBounds.Left;
+            int y = e.MarginBounds.Top;
+            System.Drawing.Brush brush = new SolidBrush(magicSpellBox.ForeColor);
+
+            while (linesPrinted < lines.Length)
+            {
+                e.Graphics.DrawString(lines[linesPrinted++],
+                    magicSpellBox.Font, brush, x, y);
+                y += 15;
+                if (y >= e.MarginBounds.Bottom)
+                {
+                    e.HasMorePages = true;
+                    return;
+                }
+            }
+            linesPrinted = 0;
+            e.HasMorePages = false;
+        }
+
+        #endregion // end of publish menu
+
+        #region Format Tool Methods
+
+        private void ButtonFontSelect_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (magicSpellBox.SelectionFont != null)
+                {
+                    fontDialog.Font = magicSpellBox.SelectionFont;
+                }
+                else
+                {
+                    fontDialog.Font = null;
+                }
+                fontDialog.ShowApply = true;
+                if (fontDialog.ShowDialog() == DialogResult.OK)
+                {
+                    magicSpellBox.SelectionFont = fontDialog.Font;
+                }
+            }
+            catch
+            {
+                SystemSounds.Hand.Play();
+            }
+        }
+
+        private void ButtonFontColor_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                colorDialog.Color = magicSpellBox.ForeColor;
+                if (colorDialog.ShowDialog() == DialogResult.OK)
+                {
+                    magicSpellBox.SetSelectionColor(colorDialog.Color.ToMediaColor());
+                }
+            }
+            catch
+            {
+                SystemSounds.Hand.Play();
+            }
+        }
+
+        private void ButtonBold_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (magicSpellBox.SelectionFont != null)
+                {
+                    Font currentFont = magicSpellBox.SelectionFont;
+                    System.Drawing.FontStyle newFontStyle;
+                    newFontStyle = magicSpellBox.SelectionFont.Style ^ System.Drawing.FontStyle.Bold;
+                    magicSpellBox.SelectionFont = new Font(currentFont.FontFamily, currentFont.Size, newFontStyle);
+                }
+            }
+            catch
+            {
+                SystemSounds.Hand.Play();
+            }
+        }
+
+        private void ButtonItalic_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (magicSpellBox.SelectionFont != null)
+                {
+                    Font currentFont = magicSpellBox.SelectionFont;
+                    System.Drawing.FontStyle newFontStyle;
+                    newFontStyle = magicSpellBox.SelectionFont.Style ^ System.Drawing.FontStyle.Italic;
+                    magicSpellBox.SelectionFont = new Font(currentFont.FontFamily, currentFont.Size, newFontStyle);
+                }
+            }
+            catch
+            {
+                SystemSounds.Hand.Play();
+            }
+        }
+
+        private void ButtonUnderline_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (magicSpellBox.SelectionFont != null)
+                {
+                    Font currentFont = magicSpellBox.SelectionFont;
+                    System.Drawing.FontStyle newFontStyle;
+                    newFontStyle = magicSpellBox.SelectionFont.Style ^ System.Drawing.FontStyle.Underline;
+                    magicSpellBox.SelectionFont = new Font(currentFont.FontFamily, currentFont.Size, newFontStyle);
+                }
+            }
+            catch
+            {
+                SystemSounds.Hand.Play();
+            }
+        }
+
+        private void ButtonAlignLeft_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                magicSpellBox.SetAlignment(TextAlignment.Left);
+                buttonAlignCenter.Checked = false;
+                buttonAlignRight.Checked = false;
+            }
+            catch
+            {
+                SystemSounds.Hand.Play();
+            }
+        }
+
+        private void ButtonAlignCenter_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                magicSpellBox.SetAlignment(TextAlignment.Center);
+                buttonAlignRight.Checked = false;
+                buttonAlignLeft.Checked = false;
+            }
+            catch
+            {
+                SystemSounds.Hand.Play();
+            }
+        }
+
+        private void ButtonAlignRight_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                magicSpellBox.SetAlignment(TextAlignment.Right);
+                buttonAlignCenter.Checked = false;
+                buttonAlignLeft.Checked = false;
+            }
+            catch
+            {
+                SystemSounds.Hand.Play();
+            }
+        }
+
+        private void ButtonBullets_Click(object sender, EventArgs e)
+        {
+            var paragraph = magicSpellBox.Box.Selection.Start.Paragraph;
+
+            if (paragraph != null)
+            {
+                // Toggle bullets
+                if (paragraph.Parent is ListItem)
+                {
+                    // If the paragraph is inside a ListItem, remove bullets
+                    var listItem = paragraph.Parent as ListItem;
+                    var listItemParagraph = listItem.Blocks.FirstBlock as Paragraph;
+
+                    var listItemContainer = listItemParagraph.Parent as ListItem;
+                    if (listItemContainer != null)
+                    {
+                        listItemContainer.Blocks.Remove(listItemParagraph);
+                        // Remove the ListItem if there are no more paragraphs
+                        if (!listItemContainer.Blocks.Any())
+                        {
+                            var list = listItemContainer.Parent as List;
+                            if (list != null)
+                            {
+                                list.ListItems.Remove(listItemContainer);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // If no bullets, add them
+                    var list = new List();
+                    var listItem = new ListItem(new Paragraph(new Run("")));
+
+                    if (paragraph.Parent is Section)
+                    {
+                        var section = paragraph.Parent as Section;
+                        list.ListItems.Add(listItem);
+                        section.Blocks.InsertAfter(list, paragraph);
+                    }
+                }
+            }
+        }
+
+        #endregion // end format toolbar
+
+        #region Form Closing Handler
+
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                if (magicSpellBox.Modified == true)
+                {
+                    DialogResult answer;
+                    answer = System.Windows.Forms.MessageBox.Show("Save current document before exiting?", "Unsaved Document", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (answer == DialogResult.No)
+                    {
+                        magicSpellBox.Modified = false;
+                        magicSpellBox.ResetText();
+                        return;
+                    }
+                    else SaveToolStripMenuItem_Click(this, new EventArgs());
+                }
+                else magicSpellBox.ResetText();
+                currentFile = "";
+                Text = "Editor: New Document";
+            }
+            catch
+            {
+                SystemSounds.Hand.Play();
+            }
+        }
+
+        #endregion
+
+        #region Word and Character Count
+
+        private new void TextChanged(object sender, EventArgs e)
+        {
+            TextChanged_WordCount(sender, e);
+            TextChanged_CharacterCount(sender, e);
+        }
+        private void TextChanged_WordCount(object sender, EventArgs e)
+        {
+            string[] words = Regex.Split(magicSpellBox.Text, @"\W+");
+            int wordCount = words.Length;
+            labelWordCount.Text = wordCount == 0 || wordCount > 1 ? $"{wordCount} words" : "1 word";
+        }
+        private void TextChanged_CharacterCount(object sender, EventArgs e)
+        {
+            int charCount = magicSpellBox.Text.Length;
+            labelCharCount.Text = charCount == 0 || charCount > 1 ? $"{charCount} characters" : "1 character";
+        }
+
+        #endregion
+
+    } // close form
+} // close main

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Word Processor", "Word Processor\Word Processor.csproj", "{8DE767E8-23C7-441B-8AB5-EBB7522199E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rich Text Box", "Word Processor\Rich Text Box.csproj", "{8DE767E8-23C7-441B-8AB5-EBB7522199E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
