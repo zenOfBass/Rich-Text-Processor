@@ -680,16 +680,11 @@ namespace Rich_Text_Processor
 
         private void TextChanged_CharacterCount(object sender, EventArgs e)
         {
-            string text = magicSpellBox.Text;
+            TextRange textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);
+            string text = textRange.Text;
 
-            if (string.IsNullOrEmpty(text))
-            {
-                labelWordCount.Text = "0 characters";
-                return;
-            }
-
-            int charCount = magicSpellBox.Text.Count(c => !char.IsWhiteSpace(c));
-            labelCharCount.Text = charCount > 1 ? $"{charCount} characters" : "1 characters";
+            int charCount = text.Count(c => !char.IsWhiteSpace(c));
+            labelCharCount.Text = $"{charCount} characters";
         }
 
         #endregion // end word and character count
