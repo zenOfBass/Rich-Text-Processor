@@ -86,10 +86,7 @@ namespace Rich_Text_Processor
                         OpenFile();
                     }
                 }
-                else
-                {
-                    OpenFile();
-                }
+                else OpenFile();
             }
             catch
             {
@@ -115,7 +112,7 @@ namespace Rich_Text_Processor
                     if (strExt == ".RTF")
                     {
                         // Load RTF content into the MagicSpellBox
-                        var textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);
+                        var textRange = new TextRange(magicSpellBox.WPFBox.Document.ContentStart, magicSpellBox.WPFBox.Document.ContentEnd);
                         using (var fs = new FileStream(openFileDialog.FileName, FileMode.Open))
                         {
                             textRange.Load(fs, System.Windows.Forms.DataFormats.Rtf);
@@ -130,8 +127,8 @@ namespace Rich_Text_Processor
                         txtReader = null;
 
                         // Set the selection range to the entire text
-                        TextRange textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);
-                        magicSpellBox.Box.Selection.Select(textRange.Start, textRange.End);
+                        TextRange textRange = new TextRange(magicSpellBox.WPFBox.Document.ContentStart, magicSpellBox.WPFBox.Document.ContentEnd);
+                        magicSpellBox.WPFBox.Selection.Select(textRange.Start, textRange.End);
                     }
                     currentFile = openFileDialog.FileName;
                     magicSpellBox.Modified = false;
@@ -162,11 +159,8 @@ namespace Rich_Text_Processor
                     if (strExt == ".RTF")
                     {
                         // Save RTF content from MagicSpellBox
-                        var textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);
-                        using (var fs = new FileStream(saveFileDialog.FileName, FileMode.Create))
-                        {
-                            textRange.Save(fs, System.Windows.Forms.DataFormats.Rtf);
-                        }
+                        var textRange = new TextRange(magicSpellBox.WPFBox.Document.ContentStart, magicSpellBox.WPFBox.Document.ContentEnd);
+                        using (var fs = new FileStream(saveFileDialog.FileName, FileMode.Create)) textRange.Save(fs, System.Windows.Forms.DataFormats.Rtf);
                     }
                     else
                     {
@@ -176,7 +170,7 @@ namespace Rich_Text_Processor
                         txtWriter.Write(magicSpellBox.Text);
                         txtWriter.Close();
                         txtWriter = null;
-                        magicSpellBox.Box.Selection.Select(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentStart);
+                        magicSpellBox.WPFBox.Selection.Select(magicSpellBox.WPFBox.Document.ContentStart, magicSpellBox.WPFBox.Document.ContentStart);
                     }
                     currentFile = saveFileDialog.FileName;
                     magicSpellBox.Modified = false;
@@ -208,23 +202,17 @@ namespace Rich_Text_Processor
                     if (strExt == ".RTF")
                     {
                         // Save RTF content from the MagicSpellBox
-                        var textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);
-                        using (var fs = new FileStream(saveFileDialog.FileName, FileMode.Create))
-                        {
-                            textRange.Save(fs, System.Windows.Forms.DataFormats.Rtf);
-                        }
+                        var textRange = new TextRange(magicSpellBox.WPFBox.Document.ContentStart, magicSpellBox.WPFBox.Document.ContentEnd);
+                        using (var fs = new FileStream(saveFileDialog.FileName, FileMode.Create)) textRange.Save(fs, System.Windows.Forms.DataFormats.Rtf);
                     }
                     else
                     {
                         // Save plain text content from the MagicSpellBox
-                        using (var txtWriter = new StreamWriter(saveFileDialog.FileName))
-                        {
-                            txtWriter.Write(new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd).Text);
-                        }
+                        using (var txtWriter = new StreamWriter(saveFileDialog.FileName)) txtWriter.Write(new TextRange(magicSpellBox.WPFBox.Document.ContentStart, magicSpellBox.WPFBox.Document.ContentEnd).Text);
                     }
 
                     // Clear the selection
-                    magicSpellBox.Box.Selection.Select(magicSpellBox.Box.Document.ContentEnd, magicSpellBox.Box.Document.ContentEnd);
+                    magicSpellBox.WPFBox.Selection.Select(magicSpellBox.WPFBox.Document.ContentEnd, magicSpellBox.WPFBox.Document.ContentEnd);
                     currentFile = saveFileDialog.FileName;
                     magicSpellBox.Modified = false;
                     Text = "Editor: " + currentFile.ToString();
@@ -336,10 +324,7 @@ namespace Rich_Text_Processor
         {
             try
             {
-                if (magicSpellBox.CanUndo)
-                {
-                    magicSpellBox.Undo();
-                }
+                if (magicSpellBox.CanUndo) magicSpellBox.Undo();
             }
             catch
             {
@@ -410,10 +395,7 @@ namespace Rich_Text_Processor
             else lines = magicSpellBox.Text.Split(param);
             int i = 0;
             char[] trimParam = { '\r' };
-            foreach (string s in lines)
-            {
-                lines[i++] = s.TrimEnd(trimParam);
-            }
+            foreach (string s in lines) lines[i++] = s.TrimEnd(trimParam);
         }
 
         private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
@@ -424,8 +406,7 @@ namespace Rich_Text_Processor
 
             while (linesPrinted < lines.Length)
             {
-                e.Graphics.DrawString(lines[linesPrinted++],
-                    magicSpellBox.Font, brush, x, y);
+                e.Graphics.DrawString(lines[linesPrinted++], magicSpellBox.Font, brush, x, y);
                 y += 15;
                 if (y >= e.MarginBounds.Bottom)
                 {
@@ -445,19 +426,10 @@ namespace Rich_Text_Processor
         {
             try
             {
-                if (magicSpellBox.SelectionFont != null)
-                {
-                    fontDialog.Font = magicSpellBox.SelectionFont;
-                }
-                else
-                {
-                    fontDialog.Font = null;
-                }
+                if (magicSpellBox.SelectionFont != null) fontDialog.Font = magicSpellBox.SelectionFont;
+                else fontDialog.Font = null;
                 fontDialog.ShowApply = true;
-                if (fontDialog.ShowDialog() == DialogResult.OK)
-                {
-                    magicSpellBox.SelectionFont = fontDialog.Font;
-                }
+                if (fontDialog.ShowDialog() == DialogResult.OK) magicSpellBox.SelectionFont = fontDialog.Font;
             }
             catch
             {
@@ -470,12 +442,7 @@ namespace Rich_Text_Processor
             try
             {
                 colorDialog.Color = magicSpellBox.ForeColor;
-
-                if (colorDialog.ShowDialog() == DialogResult.OK)
-                {
-                    // Apply the color to the current selection if possible
-                    magicSpellBox.ApplySelectionForeground(colorDialog.Color);
-                }
+                if (colorDialog.ShowDialog() == DialogResult.OK) magicSpellBox.ApplySelectionForeground(colorDialog.Color); // Apply the color to the current selection if possible
             }
             catch
             {
@@ -487,7 +454,7 @@ namespace Rich_Text_Processor
         {
             try
             {
-                var selection = magicSpellBox.Box.Selection;
+                var selection = magicSpellBox.WPFBox.Selection;
 
                 if (selection != null && !selection.IsEmpty)
                 {
@@ -497,7 +464,7 @@ namespace Rich_Text_Processor
 
                     FontWeight newWeight = (currentWeight != null && currentWeight.Equals(FontWeights.Bold)) ? FontWeights.Normal : FontWeights.Bold;
 
-                    magicSpellBox.Box.Selection.ApplyPropertyValue(TextElement.FontWeightProperty, newWeight);
+                    magicSpellBox.WPFBox.Selection.ApplyPropertyValue(TextElement.FontWeightProperty, newWeight);
                 }
             }
             catch
@@ -510,7 +477,7 @@ namespace Rich_Text_Processor
         {
             try
             {
-                var selection = magicSpellBox.Box.Selection;
+                var selection = magicSpellBox.WPFBox.Selection;
 
                 if (selection != null && !selection.IsEmpty)
                 {
@@ -520,7 +487,7 @@ namespace Rich_Text_Processor
 
                     System.Windows.FontStyle newStyle = (currentStyle != null && currentStyle.Equals(FontStyles.Italic)) ? FontStyles.Normal : FontStyles.Italic;
 
-                    magicSpellBox.Box.Selection.ApplyPropertyValue(TextElement.FontStyleProperty, newStyle);
+                    magicSpellBox.WPFBox.Selection.ApplyPropertyValue(TextElement.FontStyleProperty, newStyle);
                 }
             }
             catch
@@ -535,7 +502,7 @@ namespace Rich_Text_Processor
             {
                 if (magicSpellBox.SelectionFont != null)
                 {
-                    TextRange selectedText = new TextRange(magicSpellBox.Box.Selection.Start, magicSpellBox.Box.Selection.End);
+                    TextRange selectedText = new TextRange(magicSpellBox.WPFBox.Selection.Start, magicSpellBox.WPFBox.Selection.End);
                     selectedText.ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Underline);
                 }
             }
@@ -590,7 +557,7 @@ namespace Rich_Text_Processor
         private void ButtonBullets_Click(object sender, EventArgs e)
         {
             // Get the current selection
-            TextRange selection = new TextRange(magicSpellBox.Box.Selection.Start, magicSpellBox.Box.Selection.End);
+            TextRange selection = new TextRange(magicSpellBox.WPFBox.Selection.Start, magicSpellBox.WPFBox.Selection.End);
 
             // Check if the selection is empty
             if (!selection.IsEmpty)
@@ -607,14 +574,14 @@ namespace Rich_Text_Processor
                     // Check if the line is not empty
                     if (!string.IsNullOrWhiteSpace(line))
                     {
-                        magicSpellBox.Box.CaretPosition.InsertTextInRun("\u2022 " + line.Trim());
+                        magicSpellBox.WPFBox.CaretPosition.InsertTextInRun("\u2022 " + line.Trim());
 
                         // Move the caret to the end of the inserted text
-                        magicSpellBox.Box.CaretPosition = magicSpellBox.Box.CaretPosition.GetPositionAtOffset(4 + line.Trim().Length);
+                        magicSpellBox.WPFBox.CaretPosition = magicSpellBox.WPFBox.CaretPosition.GetPositionAtOffset(4 + line.Trim().Length);
                     }
 
                     // Insert a newline after each line
-                    magicSpellBox.Box.CaretPosition.InsertParagraphBreak();
+                    magicSpellBox.WPFBox.CaretPosition.InsertParagraphBreak();
                 }
             }
         }
@@ -680,7 +647,7 @@ namespace Rich_Text_Processor
 
         private void TextChanged_CharacterCount(object sender, EventArgs e)
         {
-            TextRange textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);
+            TextRange textRange = new TextRange(magicSpellBox.WPFBox.Document.ContentStart, magicSpellBox.WPFBox.Document.ContentEnd);
             string text = textRange.Text;
 
             int charCount = text.Count(c => !char.IsWhiteSpace(c));
@@ -688,6 +655,5 @@ namespace Rich_Text_Processor
         }
 
         #endregion // end word and character count
-
     } // close class
 } // close namespace

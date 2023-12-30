@@ -16,18 +16,16 @@ namespace Rich_Text_Processor
     [Designer(typeof(ControlDesigner))]
     [DesignerSerializer("System.Windows.Forms.Design.ControlCodeDomSerializer, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
                 "System.ComponentModel.Design.Serialization.CodeDomSerializer, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
-    public class MagicSpellBox : ElementHost
+    public class MagicSpellBox : ElementHost, IMagicSpellBox
     {
-        private readonly RichTextBox box;
-
         public MagicSpellBox()
         {
-            box = new RichTextBox();
-            base.Child = box;
-            box.IsReadOnly = false;
-            box.TextChanged += (s, e) => OnTextChanged(EventArgs.Empty);
-            box.SpellCheck.IsEnabled = true;
-            box.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+            WPFBox = new RichTextBox();
+            base.Child = WPFBox;
+            WPFBox.IsReadOnly = false;
+            WPFBox.TextChanged += (s, e) => OnTextChanged(EventArgs.Empty);
+            WPFBox.SpellCheck.IsEnabled = true;
+            WPFBox.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
             Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular);
             Multiline = true;
             Size = new System.Drawing.Size(100, 20);
@@ -38,21 +36,21 @@ namespace Rich_Text_Processor
         {
             get
             {
-                string richText = new TextRange(box.Document.ContentStart, box.Document.ContentEnd).Text;
+                string richText = new TextRange(WPFBox.Document.ContentStart, WPFBox.Document.ContentEnd).Text;
                 return richText;
             }
             set
             {
-                box.Document.Blocks.Clear();
-                box.Document.Blocks.Add(new Paragraph(new Run(value)));
+                WPFBox.Document.Blocks.Clear();
+                WPFBox.Document.Blocks.Add(new Paragraph(new Run(value)));
             }
         }
 
         [DefaultValue(false)]
         public bool Multiline
         {
-            get { return box.AcceptsReturn; }
-            set { box.AcceptsReturn = value; }
+            get { return WPFBox.AcceptsReturn; }
+            set { WPFBox.AcceptsReturn = value; }
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -71,25 +69,27 @@ namespace Rich_Text_Processor
             set;
         }
 
-        public RichTextBox Box => box;
+        public System.Windows.Controls.RichTextBox WPFBox { get; }
 
-        public void SelectAll() => box.SelectAll();
+        public System.Windows.Forms.RichTextBox WFBox { get; }
 
-        public void Copy() => box.Copy();
+        public void SelectAll() => WPFBox.SelectAll();
 
-        public void Cut() => box.Cut();
+        public void Copy() => WPFBox.Copy();
 
-        public void Paste() => box.Paste();
+        public void Cut() => WPFBox.Cut();
 
-        public bool CanUndo => box.CanUndo;
+        public void Paste() => WPFBox.Paste();
 
-        public bool CanRedo => box.CanRedo;
+        public bool CanUndo => WPFBox.CanUndo;
 
-        public void Undo() => box.Undo();
+        public bool CanRedo => WPFBox.CanRedo;
 
-        public void Redo() => box.Redo();
+        public void Undo() => WPFBox.Undo();
 
-        public string SelectedText => box.Selection.Text;
+        public void Redo() => WPFBox.Redo();
+
+        public string SelectedText => WPFBox.Selection.Text;
 
         private Font ConvertToFont(object fontFamily, object fontSize)
         {
@@ -101,7 +101,7 @@ namespace Rich_Text_Processor
 
         public Font SelectionFont
         {
-            get { return ConvertToFont(box.Selection.GetPropertyValue(Control.FontFamilyProperty), box.Selection.GetPropertyValue(Control.FontSizeProperty)); }
+            get { return ConvertToFont(WPFBox.Selection.GetPropertyValue(Control.FontFamilyProperty), WPFBox.Selection.GetPropertyValue(Control.FontSizeProperty)); }
             set { ApplyFont(value); }
         }
 
@@ -109,8 +109,8 @@ namespace Rich_Text_Processor
         {
             if (font != null)
             {
-                TextPointer start = box.Selection.Start;
-                TextPointer end = box.Selection.End;
+                TextPointer start = WPFBox.Selection.Start;
+                TextPointer end = WPFBox.Selection.End;
 
                 // Apply font family and size
                 start.Paragraph.FontFamily = new System.Windows.Media.FontFamily(font.FontFamily.Name);
@@ -135,10 +135,10 @@ namespace Rich_Text_Processor
 
         public void SetSelectionColor(System.Windows.Media.Color color)
         {
-            if (box.Selection != null)
+            if (WPFBox.Selection != null)
             {
                 // Check if the selection is actually text
-                if (box.Selection.Text.Length > 0)
+                if (WPFBox.Selection.Text.Length > 0)
                 {
                     // Apply color to each Run element in the selection
                     foreach (Run run in GetRunsInSelection())
@@ -151,10 +151,10 @@ namespace Rich_Text_Processor
 
         private IEnumerable<Run> GetRunsInSelection()
         {
-            var textPointer = box.Selection.Start;
+            var textPointer = WPFBox.Selection.Start;
             var runs = new List<Run>();
 
-            while (textPointer.CompareTo(box.Selection.End) < 0)
+            while (textPointer.CompareTo(WPFBox.Selection.End) < 0)
             {
                 if (textPointer.Parent is Run run)
                 {
@@ -168,15 +168,15 @@ namespace Rich_Text_Processor
 
         public void SetAlignment(TextAlignment alignment)
         {
-            var paragraph = box.Selection.Start.Paragraph;
+            var paragraph = WPFBox.Selection.Start.Paragraph;
             if (paragraph != null) paragraph.TextAlignment = alignment;
         }
 
         public void ApplySelectionForeground(System.Drawing.Color color)
         {
-            if (box.Selection != null)
+            if (WPFBox.Selection != null)
             {
-                var selectionRange = new TextRange(box.Selection.Start, box.Selection.End);
+                var selectionRange = new TextRange(WPFBox.Selection.Start, WPFBox.Selection.End);
                 selectionRange.ApplyPropertyValue(TextElement.ForegroundProperty, new SolidColorBrush(color.ToMediaColor()));
             }
         }
