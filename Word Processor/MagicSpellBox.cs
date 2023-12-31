@@ -16,26 +16,21 @@ namespace Rich_Text_Processor
     [Designer(typeof(ControlDesigner))]
     [DesignerSerializer("System.Windows.Forms.Design.ControlCodeDomSerializer, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
                 "System.ComponentModel.Design.Serialization.CodeDomSerializer, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
-    public class MagicSpellBox : ElementHost, INotifyPropertyChanged
+    public class MagicSpellBox : ElementHost
     {
-        private RichTextBox box;
-
         public MagicSpellBox()
         {
             Box = new RichTextBox();
             Box.IsReadOnly = false;
-            Box.TextChanged += (s, e) => OnTextChanged(EventArgs.Empty);
+            Box.TextChanged += (s, e) => MagicSpellBox_TextChanged(s, e);  // Fix: Attach the correct event handler
             Box.SpellCheck.IsEnabled = true;
             Box.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
             base.Child = Box;
             Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular);
             Multiline = true;
             Size = new System.Drawing.Size(100, 20);
+            Text = "";
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         [Browsable(true)]
         [Category("Action")]
@@ -81,15 +76,7 @@ namespace Rich_Text_Processor
             set;
         }
 
-        public RichTextBox Box
-        {
-            get { return box; }
-            set
-            {
-                box = value;
-                OnPropertyChanged(nameof(Box));
-            }
-        }
+        public RichTextBox Box { get; }
 
         public void SelectAll() => Box.SelectAll();
 

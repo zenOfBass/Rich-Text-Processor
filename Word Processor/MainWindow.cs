@@ -583,11 +583,11 @@ namespace Rich_Text_Processor
 
         private new void TextChanged(object sender, EventArgs e)
         {
-            TextChanged_WordCount(sender, e);
-            TextChanged_CharacterCount(sender, e);
+            TextChanged_WordCount();
+            TextChanged_CharacterCount();
         }
 
-        private void TextChanged_WordCount(object sender, EventArgs e)
+        private void TextChanged_WordCount()
         {
             string text = magicSpellBox.Text.Trim();
 
@@ -601,7 +601,7 @@ namespace Rich_Text_Processor
             labelWordCount.Text = words.Length > 1 ? $"{words.Length} words" : "1 word";
         }
 
-        private void TextChanged_CharacterCount(object sender, EventArgs e)
+        private void TextChanged_CharacterCount()
         {
             TextRange textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);
             labelCharCount.Text = $"{textRange.Text.Count(c => !char.IsWhiteSpace(c))} characters";
