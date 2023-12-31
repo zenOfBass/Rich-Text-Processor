@@ -37,12 +37,11 @@ namespace Rich_Text_Processor
 
         protected virtual void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        protected void MagicSpellBox_TextChanged(object sender, EventArgs e) => TextChanged?.Invoke(this, e);
-
         [Browsable(true)]
         [Category("Action")]
         [Description("Invoked when Text Changes")]
         public new event EventHandler TextChanged;
+        protected void MagicSpellBox_TextChanged(object sender, EventArgs e) => TextChanged?.Invoke(this, e);
 
         [DefaultValue(false)]
         public override string Text
@@ -110,12 +109,7 @@ namespace Rich_Text_Processor
 
         public string SelectedText => Box.Selection.Text;
 
-        private Font ConvertToFont(object fontFamily, object fontSize)
-        {
-            string familyName = fontFamily as string;
-            double size = Convert.ToDouble(fontSize);
-            return new Font(familyName, (float)size);
-        }
+        private Font ConvertToFont(object fontFamily, object fontSize) => new Font(fontFamily as string, (float)(double)Convert.ToDouble(fontSize));
 
         public Font SelectionFont
         {
@@ -127,12 +121,10 @@ namespace Rich_Text_Processor
         {
             if (font != null)
             {
-                TextPointer start = Box.Selection.Start;
-                TextPointer end = Box.Selection.End;
-                start.Paragraph.FontFamily = new System.Windows.Media.FontFamily(font.FontFamily.Name);                                                                       // Apply font family and size
-                start.Paragraph.FontSize = font.Size;
-                if (font.Underline) new TextRange(start, end).ApplyPropertyValue(Inline.TextDecorationsProperty, new TextDecorationCollection { TextDecorations.Underline }); // Simulate underline using TextDecorations
-                else new TextRange(start, end).ApplyPropertyValue(Inline.TextDecorationsProperty, null);                                                                      // Clear underline
+                Box.Selection.Start.Paragraph.FontFamily = new System.Windows.Media.FontFamily(font.FontFamily.Name);                                                                                     // Apply font family and size
+                Box.Selection.Start.Paragraph.FontSize = font.Size;
+                if (font.Underline) new TextRange(Box.Selection.Start, Box.Selection.End).ApplyPropertyValue(Inline.TextDecorationsProperty, new TextDecorationCollection { TextDecorations.Underline }); // Simulate underline using TextDecorations
+                else new TextRange(Box.Selection.Start, Box.Selection.End).ApplyPropertyValue(Inline.TextDecorationsProperty, null);                                                                      // Clear underline
             }
         }
 

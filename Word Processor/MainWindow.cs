@@ -24,7 +24,7 @@ namespace Rich_Text_Processor
         {
             try
             {
-                if (magicSpellBox.Modified == true)
+                if (magicSpellBox.Modified)
                 {
                     DialogResult answer;
                     answer = System.Windows.Forms.MessageBox.Show("Save current document before creating new document?",
@@ -68,7 +68,7 @@ namespace Rich_Text_Processor
         {
             try
             {
-                if (magicSpellBox.Modified == true)
+                if (magicSpellBox.Modified)
                 {
                     DialogResult answer;
                     answer = System.Windows.Forms.MessageBox.Show("Save current file before opening another document?",
@@ -106,13 +106,11 @@ namespace Rich_Text_Processor
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     if (openFileDialog.FileName == "") return;
-                    string strExt;
-                    strExt = Path.GetExtension(openFileDialog.FileName);
-                    strExt = strExt.ToUpper();
+
+                    string strExt = Path.GetExtension(saveFileDialog.FileName).ToUpper();
                     if (strExt == ".RTF")
                     {
-                        // Load RTF content into the MagicSpellBox
-                        var textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);
+                        var textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd); // Load RTF content into the MagicSpellBox
                     }
                     else
                     {
@@ -143,22 +141,21 @@ namespace Rich_Text_Processor
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     if (saveFileDialog.FileName == "") return;
-                    string strExt = Path.GetExtension(saveFileDialog.FileName);
-                    strExt = strExt.ToUpper();
+
+                    string strExt = Path.GetExtension(saveFileDialog.FileName).ToUpper();
                     if (strExt == ".RTF")
                     {
-                        // Save RTF content from MagicSpellBox
-                        var textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);
+                        var textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);                      // Save RTF content from MagicSpellBox
                         using (var fs = new FileStream(saveFileDialog.FileName, FileMode.Create)) textRange.Save(fs, System.Windows.Forms.DataFormats.Rtf);
                     }
                     else
                     {
-                        using (StreamWriter txtWriter = new StreamWriter(saveFileDialog.FileName)) txtWriter.Write(magicSpellBox.Text); // Save plain text content from MagicSpellBox
+                        using (StreamWriter txtWriter = new StreamWriter(saveFileDialog.FileName)) txtWriter.Write(magicSpellBox.Text);                     // Save plain text content from MagicSpellBox
                         magicSpellBox.Box.Selection.Select(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentStart);
                     }
                     CurrentFile = saveFileDialog.FileName;
                     magicSpellBox.Modified = false;
-                    Text = "Editor: " + CurrentFile.ToString();
+                    Text = $"Editor: {CurrentFile}";
                     System.Windows.Forms.MessageBox.Show(CurrentFile.ToString() + " saved.", "File Save");
                 }
                 else System.Windows.Forms.MessageBox.Show("Save File request cancelled by user.", "Cancelled");
@@ -180,19 +177,18 @@ namespace Rich_Text_Processor
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     if (saveFileDialog.FileName == "") return;
-                    string strExt = Path.GetExtension(saveFileDialog.FileName);
-                    strExt = strExt.ToUpper();
+
+                    string strExt = Path.GetExtension(saveFileDialog.FileName).ToUpper();
                     if (strExt == ".RTF")
                     {
-                        var textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd); // Save RTF content from the MagicSpellBox
+                        var textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);                                                                          // Save RTF content from the MagicSpellBox
                         using (var fs = new FileStream(saveFileDialog.FileName, FileMode.Create)) textRange.Save(fs, System.Windows.Forms.DataFormats.Rtf);
                     }
                     else using (var txtWriter = new StreamWriter(saveFileDialog.FileName)) txtWriter.Write(new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd).Text); // Save plain text content from the MagicSpellBox
-
-                    magicSpellBox.Box.Selection.Select(magicSpellBox.Box.Document.ContentEnd, magicSpellBox.Box.Document.ContentEnd); // Clear the selection
+                    magicSpellBox.Box.Selection.Select(magicSpellBox.Box.Document.ContentEnd, magicSpellBox.Box.Document.ContentEnd);                                                                           // Clear the selection
                     CurrentFile = saveFileDialog.FileName;
                     magicSpellBox.Modified = false;
-                    Text = "Editor: " + CurrentFile.ToString();
+                    Text = $"Editor: {CurrentFile}";
                     System.Windows.Forms.MessageBox.Show(CurrentFile.ToString() + " saved.", "File Save");
                 }
                 else System.Windows.Forms.MessageBox.Show("Save File request cancelled by user.", "Cancelled");
