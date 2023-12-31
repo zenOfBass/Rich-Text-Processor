@@ -14,9 +14,9 @@ namespace Rich_Text_Processor
     { // open class
         public MainWindow() => InitializeComponent();
 
-        private string currentFile;
-        private int linesPrinted;
-        private string[] lines;
+        private string CurrentFile { get; set; }
+        private int LinesPrinted { get; set; }
+        private string[] Lines { get; set; }
 
         #region File Menu Methods
 
@@ -33,7 +33,7 @@ namespace Rich_Text_Processor
                                                                 MessageBoxIcon.Question);
                     if (answer == DialogResult.No)
                     {
-                        currentFile = "";
+                        CurrentFile = "";
                         Text = "Editor: New Document";
                         magicSpellBox.Modified = false;
                         magicSpellBox.ResetText();
@@ -44,14 +44,14 @@ namespace Rich_Text_Processor
                         SaveToolStripMenuItem_Click(this, new EventArgs());
                         magicSpellBox.Modified = false;
                         magicSpellBox.ResetText();
-                        currentFile = "";
+                        CurrentFile = "";
                         Text = "Editor: New Document";
                         return;
                     }
                 }
                 else
                 {
-                    currentFile = "";
+                    CurrentFile = "";
                     Text = "Editor: New Document";
                     magicSpellBox.Modified = false;
                     magicSpellBox.ResetText();
@@ -113,26 +113,16 @@ namespace Rich_Text_Processor
                     {
                         // Load RTF content into the MagicSpellBox
                         var textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);
-                        using (var fs = new FileStream(openFileDialog.FileName, FileMode.Open))
-                        {
-                            textRange.Load(fs, System.Windows.Forms.DataFormats.Rtf);
-                        }
                     }
                     else
                     {
-                        StreamReader txtReader;
-                        txtReader = new StreamReader(openFileDialog.FileName);
-                        magicSpellBox.Text = txtReader.ReadToEnd();
-                        txtReader.Close();
-                        txtReader = null;
-
-                        // Set the selection range to the entire text
-                        TextRange textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);
+                        using (StreamReader txtReader = new StreamReader(openFileDialog.FileName)) magicSpellBox.Text = txtReader.ReadToEnd();
+                        TextRange textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd); // Set the selection range to the entire text
                         magicSpellBox.Box.Selection.Select(textRange.Start, textRange.End);
                     }
-                    currentFile = openFileDialog.FileName;
+                    CurrentFile = openFileDialog.FileName;
                     magicSpellBox.Modified = false;
-                    Text = "Editor: " + currentFile.ToString();
+                    Text = $"Editor: {CurrentFile}";
                 }
                 else System.Windows.Forms.MessageBox.Show("Open File request cancelled by user.", "Cancelled");
             }
@@ -153,8 +143,7 @@ namespace Rich_Text_Processor
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     if (saveFileDialog.FileName == "") return;
-                    string strExt;
-                    strExt = Path.GetExtension(saveFileDialog.FileName);
+                    string strExt = Path.GetExtension(saveFileDialog.FileName);
                     strExt = strExt.ToUpper();
                     if (strExt == ".RTF")
                     {
@@ -164,18 +153,13 @@ namespace Rich_Text_Processor
                     }
                     else
                     {
-                        // Save plain text content from MagicSpellBox
-                        StreamWriter txtWriter;
-                        txtWriter = new StreamWriter(saveFileDialog.FileName);
-                        txtWriter.Write(magicSpellBox.Text);
-                        txtWriter.Close();
-                        txtWriter = null;
+                        using (StreamWriter txtWriter = new StreamWriter(saveFileDialog.FileName)) txtWriter.Write(magicSpellBox.Text); // Save plain text content from MagicSpellBox
                         magicSpellBox.Box.Selection.Select(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentStart);
                     }
-                    currentFile = saveFileDialog.FileName;
+                    CurrentFile = saveFileDialog.FileName;
                     magicSpellBox.Modified = false;
-                    Text = "Editor: " + currentFile.ToString();
-                    System.Windows.Forms.MessageBox.Show(currentFile.ToString() + " saved.", "File Save");
+                    Text = "Editor: " + CurrentFile.ToString();
+                    System.Windows.Forms.MessageBox.Show(CurrentFile.ToString() + " saved.", "File Save");
                 }
                 else System.Windows.Forms.MessageBox.Show("Save File request cancelled by user.", "Cancelled");
             }
@@ -196,27 +180,20 @@ namespace Rich_Text_Processor
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     if (saveFileDialog.FileName == "") return;
-                    string strExt;
-                    strExt = Path.GetExtension(saveFileDialog.FileName);
+                    string strExt = Path.GetExtension(saveFileDialog.FileName);
                     strExt = strExt.ToUpper();
                     if (strExt == ".RTF")
                     {
-                        // Save RTF content from the MagicSpellBox
-                        var textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);
+                        var textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd); // Save RTF content from the MagicSpellBox
                         using (var fs = new FileStream(saveFileDialog.FileName, FileMode.Create)) textRange.Save(fs, System.Windows.Forms.DataFormats.Rtf);
                     }
-                    else
-                    {
-                        // Save plain text content from the MagicSpellBox
-                        using (var txtWriter = new StreamWriter(saveFileDialog.FileName)) txtWriter.Write(new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd).Text);
-                    }
+                    else using (var txtWriter = new StreamWriter(saveFileDialog.FileName)) txtWriter.Write(new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd).Text); // Save plain text content from the MagicSpellBox
 
-                    // Clear the selection
-                    magicSpellBox.Box.Selection.Select(magicSpellBox.Box.Document.ContentEnd, magicSpellBox.Box.Document.ContentEnd);
-                    currentFile = saveFileDialog.FileName;
+                    magicSpellBox.Box.Selection.Select(magicSpellBox.Box.Document.ContentEnd, magicSpellBox.Box.Document.ContentEnd); // Clear the selection
+                    CurrentFile = saveFileDialog.FileName;
                     magicSpellBox.Modified = false;
-                    Text = "Editor: " + currentFile.ToString();
-                    System.Windows.Forms.MessageBox.Show(currentFile.ToString() + " saved.", "File Save");
+                    Text = "Editor: " + CurrentFile.ToString();
+                    System.Windows.Forms.MessageBox.Show(CurrentFile.ToString() + " saved.", "File Save");
                 }
                 else System.Windows.Forms.MessageBox.Show("Save File request cancelled by user.", "Cancelled");
             }
@@ -391,11 +368,11 @@ namespace Rich_Text_Processor
         {
             char[] param = { '\n' };
 
-            if (printDialog.PrinterSettings.PrintRange == PrintRange.Selection) lines = magicSpellBox.SelectedText.Split(param);
-            else lines = magicSpellBox.Text.Split(param);
+            if (printDialog.PrinterSettings.PrintRange == PrintRange.Selection) Lines = magicSpellBox.SelectedText.Split(param);
+            else Lines = magicSpellBox.Text.Split(param);
             int i = 0;
             char[] trimParam = { '\r' };
-            foreach (string s in lines) lines[i++] = s.TrimEnd(trimParam);
+            foreach (string s in Lines) Lines[i++] = s.TrimEnd(trimParam);
         }
 
         private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
@@ -404,9 +381,9 @@ namespace Rich_Text_Processor
             int y = e.MarginBounds.Top;
             Brush brush = new SolidBrush(magicSpellBox.ForeColor);
 
-            while (linesPrinted < lines.Length)
+            while (LinesPrinted < Lines.Length)
             {
-                e.Graphics.DrawString(lines[linesPrinted++], magicSpellBox.Font, brush, x, y);
+                e.Graphics.DrawString(Lines[LinesPrinted++], magicSpellBox.Font, brush, x, y);
                 y += 15;
                 if (y >= e.MarginBounds.Bottom)
                 {
@@ -414,7 +391,7 @@ namespace Rich_Text_Processor
                     return;
                 }
             }
-            linesPrinted = 0;
+            LinesPrinted = 0;
             e.HasMorePages = false;
         }
 
@@ -454,17 +431,12 @@ namespace Rich_Text_Processor
         {
             try
             {
-                var selection = magicSpellBox.Box.Selection;
-
-                if (selection != null && !selection.IsEmpty)
+                if (magicSpellBox.Box.Selection != null && !magicSpellBox.Box.Selection.IsEmpty)
                 {
-                    var currentFont = new FontFamily(selection.GetPropertyValue(TextElement.FontFamilyProperty).ToString());
-                    var currentSize = selection.GetPropertyValue(TextElement.FontSizeProperty);
-                    var currentWeight = selection.GetPropertyValue(TextElement.FontWeightProperty);
-
-                    FontWeight newWeight = (currentWeight != null && currentWeight.Equals(FontWeights.Bold)) ? FontWeights.Normal : FontWeights.Bold;
-
-                    magicSpellBox.Box.Selection.ApplyPropertyValue(TextElement.FontWeightProperty, newWeight);
+                    var currentFont = new FontFamily(magicSpellBox.Box.Selection.GetPropertyValue(TextElement.FontFamilyProperty).ToString());
+                    var currentSize = magicSpellBox.Box.Selection.GetPropertyValue(TextElement.FontSizeProperty);
+                    var currentWeight = magicSpellBox.Box.Selection.GetPropertyValue(TextElement.FontWeightProperty);
+                    magicSpellBox.Box.Selection.ApplyPropertyValue(TextElement.FontWeightProperty, (currentWeight != null && currentWeight.Equals(FontWeights.Bold)) ? FontWeights.Normal : FontWeights.Bold);
                 }
             }
             catch
@@ -473,22 +445,16 @@ namespace Rich_Text_Processor
             }
         }
 
-
         private void ButtonItalic_Click(object sender, EventArgs e)
         {
             try
             {
-                var selection = magicSpellBox.Box.Selection;
-
-                if (selection != null && !selection.IsEmpty)
+                if (magicSpellBox.Box.Selection != null && !magicSpellBox.Box.Selection.IsEmpty)
                 {
-                    var currentFont = new FontFamily(selection.GetPropertyValue(TextElement.FontFamilyProperty).ToString());
-                    var currentSize = selection.GetPropertyValue(TextElement.FontSizeProperty);
-                    var currentStyle = selection.GetPropertyValue(TextElement.FontStyleProperty);
-
-                    System.Windows.FontStyle newStyle = (currentStyle != null && currentStyle.Equals(FontStyles.Italic)) ? FontStyles.Normal : FontStyles.Italic;
-
-                    magicSpellBox.Box.Selection.ApplyPropertyValue(TextElement.FontStyleProperty, newStyle);
+                    var currentFont = new FontFamily(magicSpellBox.Box.Selection.GetPropertyValue(TextElement.FontFamilyProperty).ToString());
+                    var currentSize = magicSpellBox.Box.Selection.GetPropertyValue(TextElement.FontSizeProperty);
+                    var currentStyle = magicSpellBox.Box.Selection.GetPropertyValue(TextElement.FontStyleProperty);
+                    magicSpellBox.Box.Selection.ApplyPropertyValue(TextElement.FontStyleProperty, (currentStyle != null && currentStyle.Equals(FontStyles.Italic)) ? FontStyles.Normal : FontStyles.Italic);
                 }
             }
             catch
@@ -559,32 +525,20 @@ namespace Rich_Text_Processor
         {
             try
             {
-                // Get the current selection
-                TextRange selection = new TextRange(magicSpellBox.Box.Selection.Start, magicSpellBox.Box.Selection.End);
-
-                // Check if the selection is empty
-                if (!selection.IsEmpty)
+                if (!new TextRange(magicSpellBox.Box.Selection.Start, magicSpellBox.Box.Selection.End).IsEmpty)                            // Check if the selection is empty
                 {
-                    // Split the selected text into lines
-                    string[] lines = selection.Text.Split('\n');
+                    string[] lines = new TextRange(magicSpellBox.Box.Selection.Start, magicSpellBox.Box.Selection.End).Text.Split('\n');   // Split the selected text into lines
+                    new TextRange(magicSpellBox.Box.Selection.Start, magicSpellBox.Box.Selection.End).Text = "";                           // Clear the existing selection
 
-                    // Clear the existing selection
-                    selection.Text = "";
-
-                    // Insert a bullet point at the beginning of each line
-                    foreach (string line in lines)
+                    foreach (string line in lines)                                                                                         // Insert a bullet point at the beginning of each line
                     {
-                        // Check if the line is not empty
-                        if (!string.IsNullOrWhiteSpace(line))
+                        if (!string.IsNullOrWhiteSpace(line))                                                                              // Check if the line is not empty
                         {
                             magicSpellBox.Box.CaretPosition.InsertTextInRun("\u2022 " + line.Trim());
-
-                            // Move the caret to the end of the inserted text
-                            magicSpellBox.Box.CaretPosition = magicSpellBox.Box.CaretPosition.GetPositionAtOffset(4 + line.Trim().Length);
+                            magicSpellBox.Box.CaretPosition = magicSpellBox.Box.CaretPosition.GetPositionAtOffset(4 + line.Trim().Length); // Move the caret to the end of the inserted text
                         }
 
-                        // Insert a newline after each line
-                        magicSpellBox.Box.CaretPosition.InsertParagraphBreak();
+                        magicSpellBox.Box.CaretPosition.InsertParagraphBreak();                                                            // Insert a newline after each line
                     }
                 }
             }
@@ -618,7 +572,7 @@ namespace Rich_Text_Processor
                     else SaveToolStripMenuItem_Click(this, new EventArgs());
                 }
                 else magicSpellBox.ResetText();
-                currentFile = "";
+                CurrentFile = "";
                 Text = "Editor: New Document";
             }
             catch
@@ -641,25 +595,20 @@ namespace Rich_Text_Processor
         {
             string text = magicSpellBox.Text.Trim();
 
-            // Check if the text is empty
-            if (string.IsNullOrEmpty(text))
+            if (string.IsNullOrEmpty(text)) // Check if the text is empty
             {
                 labelWordCount.Text = "0 words";
                 return;
             }
 
             string[] words = text.Split(new char[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            int wordCount = words.Length;
-            labelWordCount.Text = wordCount > 1 ? $"{wordCount} words" : "1 word";
+            labelWordCount.Text = words.Length > 1 ? $"{words.Length} words" : "1 word";
         }
 
         private void TextChanged_CharacterCount(object sender, EventArgs e)
         {
             TextRange textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);
-            string text = textRange.Text;
-
-            int charCount = text.Count(c => !char.IsWhiteSpace(c));
-            labelCharCount.Text = $"{charCount} characters";
+            labelCharCount.Text = $"{textRange.Text.Count(c => !char.IsWhiteSpace(c))} characters";
         }
 
         #endregion // end word and character count

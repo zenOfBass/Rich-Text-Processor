@@ -16,13 +16,13 @@ namespace Rich_Text_Processor
     [Designer(typeof(ControlDesigner))]
     [DesignerSerializer("System.Windows.Forms.Design.ControlCodeDomSerializer, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
                 "System.ComponentModel.Design.Serialization.CodeDomSerializer, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
-    public class MagicSpellBox : ElementHost
+    public class MagicSpellBox : ElementHost, INotifyPropertyChanged
     {
-        private readonly RichTextBox box;
+        private RichTextBox box;
 
         public MagicSpellBox()
         {
-            box = new RichTextBox();
+            Box = new RichTextBox();
             Box.IsReadOnly = false;
             Box.TextChanged += (s, e) => OnTextChanged(EventArgs.Empty);
             Box.SpellCheck.IsEnabled = true;
@@ -32,6 +32,17 @@ namespace Rich_Text_Processor
             Multiline = true;
             Size = new System.Drawing.Size(100, 20);
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        protected void MagicSpellBox_TextChanged(object sender, EventArgs e) => TextChanged?.Invoke(this, e);
+
+        [Browsable(true)]
+        [Category("Action")]
+        [Description("Invoked when Text Changes")]
+        public new event EventHandler TextChanged;
 
         [DefaultValue(false)]
         public override string Text
@@ -71,7 +82,15 @@ namespace Rich_Text_Processor
             set;
         }
 
-        public RichTextBox Box => box;
+        public RichTextBox Box
+        {
+            get { return box; }
+            set
+            {
+                box = value;
+                OnPropertyChanged(nameof(Box));
+            }
+        }
 
         public void SelectAll() => Box.SelectAll();
 
@@ -95,7 +114,6 @@ namespace Rich_Text_Processor
         {
             string familyName = fontFamily as string;
             double size = Convert.ToDouble(fontSize);
-
             return new Font(familyName, (float)size);
         }
 
@@ -111,49 +129,23 @@ namespace Rich_Text_Processor
             {
                 TextPointer start = Box.Selection.Start;
                 TextPointer end = Box.Selection.End;
-
-                // Apply font family and size
-                start.Paragraph.FontFamily = new System.Windows.Media.FontFamily(font.FontFamily.Name);
+                start.Paragraph.FontFamily = new System.Windows.Media.FontFamily(font.FontFamily.Name);                                                                       // Apply font family and size
                 start.Paragraph.FontSize = font.Size;
-
-                // Simulate underline using TextDecorations
-                if (font.Underline)
-                {
-                    TextDecorationCollection decorations = new TextDecorationCollection();
-                    decorations.Add(TextDecorations.Underline);
-                    TextRange textRange = new TextRange(start, end);
-                    textRange.ApplyPropertyValue(Inline.TextDecorationsProperty, decorations);
-                }
-                else
-                {
-                    // Clear underline
-                    TextRange textRange = new TextRange(start, end);
-                    textRange.ApplyPropertyValue(Inline.TextDecorationsProperty, null);
-                }
+                if (font.Underline) new TextRange(start, end).ApplyPropertyValue(Inline.TextDecorationsProperty, new TextDecorationCollection { TextDecorations.Underline }); // Simulate underline using TextDecorations
+                else new TextRange(start, end).ApplyPropertyValue(Inline.TextDecorationsProperty, null);                                                                      // Clear underline
             }
         }
 
         public void SetSelectionColor(System.Windows.Media.Color color)
         {
             if (Box.Selection != null)
-            {
-                // Check if the selection is actually text
-                if (Box.Selection.Text.Length > 0)
-                {
-                    // Apply color to each Run element in the selection
-                    foreach (Run run in GetRunsInSelection())
-                    {
-                        run.Foreground = new SolidColorBrush(color);
-                    }
-                }
-            }
+                if (Box.Selection.Text.Length > 0) foreach (Run run in GetRunsInSelection()) run.Foreground = new SolidColorBrush(color); // Apply color to each Run element in the selection
         }
 
         private IEnumerable<Run> GetRunsInSelection()
         {
             var textPointer = Box.Selection.Start;
             var runs = new List<Run>();
-
             while (textPointer.CompareTo(Box.Selection.End) < 0)
             {
                 if (textPointer.Parent is Run run)
@@ -162,23 +154,17 @@ namespace Rich_Text_Processor
                     textPointer = run.ElementEnd.GetNextInsertionPosition(LogicalDirection.Forward);
                 }
             }
-
             return runs;
         }
 
         public void SetAlignment(TextAlignment alignment)
         {
-            var paragraph = Box.Selection.Start.Paragraph;
-            if (paragraph != null) paragraph.TextAlignment = alignment;
+            if (Box.Selection.Start.Paragraph != null) Box.Selection.Start.Paragraph.TextAlignment = alignment;
         }
 
         public void ApplySelectionForeground(System.Drawing.Color color)
         {
-            if (Box.Selection != null)
-            {
-                var selectionRange = new TextRange(Box.Selection.Start, Box.Selection.End);
-                selectionRange.ApplyPropertyValue(TextElement.ForegroundProperty, new SolidColorBrush(color.ToMediaColor()));
-            }
+            if (Box.Selection != null) new TextRange(Box.Selection.Start, Box.Selection.End).ApplyPropertyValue(TextElement.ForegroundProperty, new SolidColorBrush(color.ToMediaColor()));
         }
     }
 }
