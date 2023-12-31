@@ -71,7 +71,6 @@
             this.previewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.printToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.magicSpellBox = new Rich_Text_Processor.MagicSpellBox();
-            this.magicSpellBox.TextChanged += TextChanged;
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -97,44 +96,41 @@
             this.buttonAlignRight,
             this.toolStripSeparator3,
             this.toolStripButton4});
-            this.toolStrip.Location = new System.Drawing.Point(0, 30);
+            this.toolStrip.Location = new System.Drawing.Point(0, 28);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(954, 31);
+            this.toolStrip.Size = new System.Drawing.Size(954, 27);
             this.toolStrip.TabIndex = 2;
             this.toolStrip.Text = "toolStrip";
             // 
             // buttonBold
             // 
-            this.buttonBold.CheckOnClick = true;
             this.buttonBold.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.buttonBold.Image = global::Word_Processor.Properties.Resources.bold;
             this.buttonBold.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonBold.Name = "buttonBold";
             this.buttonBold.Size = new System.Drawing.Size(29, 28);
             this.buttonBold.Text = "Bold";
-            this.buttonBold.CheckedChanged += new System.EventHandler(this.ButtonBold_Click);
+            this.buttonBold.Click += new System.EventHandler(this.ButtonBold_Click);
             // 
             // buttonItalic
             // 
-            this.buttonItalic.CheckOnClick = true;
             this.buttonItalic.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.buttonItalic.Image = global::Word_Processor.Properties.Resources.italic;
             this.buttonItalic.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonItalic.Name = "buttonItalic";
-            this.buttonItalic.Size = new System.Drawing.Size(29, 28);
+            this.buttonItalic.Size = new System.Drawing.Size(29, 24);
             this.buttonItalic.Text = "Italic";
-            this.buttonItalic.CheckedChanged += new System.EventHandler(this.ButtonItalic_Click);
+            this.buttonItalic.Click += new System.EventHandler(this.ButtonItalic_Click);
             // 
             // buttonUnderline
             // 
-            this.buttonUnderline.CheckOnClick = true;
             this.buttonUnderline.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.buttonUnderline.Image = global::Word_Processor.Properties.Resources.underline;
             this.buttonUnderline.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonUnderline.Name = "buttonUnderline";
-            this.buttonUnderline.Size = new System.Drawing.Size(29, 28);
+            this.buttonUnderline.Size = new System.Drawing.Size(29, 24);
             this.buttonUnderline.Text = "Underline";
-            this.buttonUnderline.CheckedChanged += new System.EventHandler(this.ButtonUnderline_Click);
+            this.buttonUnderline.Click += new System.EventHandler(this.ButtonUnderline_Click);
             // 
             // toolStripSeparator1
             // 
@@ -268,7 +264,7 @@
             this.publishToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(954, 30);
+            this.menuStrip1.Size = new System.Drawing.Size(954, 28);
             this.menuStrip1.TabIndex = 6;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -401,14 +397,14 @@
             // 
             this.magicSpellBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.magicSpellBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.magicSpellBox.Location = new System.Drawing.Point(0, 61);
+            this.magicSpellBox.Location = new System.Drawing.Point(0, 55);
             this.magicSpellBox.Modified = false;
             this.magicSpellBox.Multiline = true;
             this.magicSpellBox.Name = "magicSpellBox";
             this.magicSpellBox.SelectionFont = new System.Drawing.Font("Microsoft Sans Serif", 13.33333F);
-            this.magicSpellBox.Size = new System.Drawing.Size(954, 634);
+            this.magicSpellBox.Size = new System.Drawing.Size(954, 640);
             this.magicSpellBox.TabIndex = 7;
-            this.magicSpellBox.Text = "";
+            this.magicSpellBox.Text = "\r\n\r\n\r\n";
             // 
             // MainWindow
             // 
@@ -432,6 +428,7 @@
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion
