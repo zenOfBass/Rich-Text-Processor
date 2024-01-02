@@ -33,11 +33,22 @@ namespace Rich_Text_Processor
             Text = "";
         }
 
+        public RichTextBox Box { get; }
+
+        [Browsable(true)]
+        [Category("Extended Properties")]
+        [Description("Set TextBox border Color")]
+        public bool Modified { get; set; }
+
         [Browsable(true)]
         [Category("Action")]
         [Description("Invoked when Text Changes")]
         public new event EventHandler TextChanged;
-        protected void MagicSpellBox_TextChanged(object sender, EventArgs e) => TextChanged?.Invoke(this, e);
+        protected void MagicSpellBox_TextChanged(object sender, EventArgs e)
+        {
+            TextChanged?.Invoke(this, e);
+            Modified = true;
+        }
 
         [DefaultValue(false)]
         public override string Text
@@ -63,12 +74,6 @@ namespace Rich_Text_Processor
             get => base.Child;
             set { /* Do nothing */ }
         }
-
-        [Browsable(true)]
-        [Category("Extended Properties")]
-        [Description("Set TextBox border Color")]
-        public bool Modified { get; set; }
-        public RichTextBox Box { get; }
 
         public void SelectAll() => Box.SelectAll();
         public void Copy() => Box.Copy();

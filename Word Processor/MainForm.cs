@@ -21,8 +21,7 @@ namespace Rich_Text_Processor
         private void NewToolStripMenuItem_Click(object sender, EventArgs e) => FileMenuHandler.HandleNew(this, magicSpellBox, saveFileDialog);
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e) => FileMenuHandler.HandleOpen(this, magicSpellBox, saveFileDialog, openFileDialog);
         private void SaveToolStripMenuItem_Click(object sender, EventArgs e) => FileMenuHandler.HandleSave(this, magicSpellBox, saveFileDialog);
-        private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e) => FileMenuHandler.HandleSaveAs(this, magicSpellBox, saveFileDialog);
-        private void ExitToolStripMenuItem_Click(object sender, EventArgs e) => FileMenuHandler.HandleExit(this, magicSpellBox);
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e) => FileMenuHandler.HandleExit(this, magicSpellBox, saveFileDialog);
 
         #endregion
 

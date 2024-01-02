@@ -94,46 +94,7 @@ namespace Word_Processor
             }
         }
 
-        public static void HandleSaveAs(MainForm form, MagicSpellBox magicSpellBox, SaveFileDialog saveFileDialog)
-        {
-            try
-            {
-                saveFileDialog.Title = "RTP - Save File";
-                saveFileDialog.DefaultExt = "rtf";
-                saveFileDialog.Filter = "Rich Text Files|*.rtf|Text Files|*.txt|HTML Files|*.htm|All Files|*.*";
-                saveFileDialog.FilterIndex = 1;
-
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    if (saveFileDialog.FileName == "") return;
-
-                    string strExt = Path.GetExtension(saveFileDialog.FileName).ToUpper();
-
-                    if (strExt == ".RTF")
-                    {
-                        var textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);
-                        using (var fs = new FileStream(saveFileDialog.FileName, FileMode.Create)) textRange.Save(fs, DataFormats.Rtf);
-                    }
-                    else
-                    {
-                        using (var txtWriter = new StreamWriter(saveFileDialog.FileName)) txtWriter.Write(new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd).Text);
-                        magicSpellBox.Box.Selection.Select(magicSpellBox.Box.Document.ContentEnd, magicSpellBox.Box.Document.ContentEnd);
-                    }
-
-                    form.CurrentFile = saveFileDialog.FileName;
-                    magicSpellBox.Modified = false;
-                    form.Text = $"Editor: {form.CurrentFile}";
-                    MessageBox.Show($"{form.CurrentFile.ToString()} saved.", "File Save");
-                }
-                else MessageBox.Show("Save File request cancelled by user.", "Cancelled");
-            }
-            catch
-            {
-                SystemSounds.Hand.Play();
-            }
-        }
-
-        public static void HandleExit(MainForm form, MagicSpellBox magicSpellBox)
+        public static void HandleExit(MainForm form, MagicSpellBox magicSpellBox, SaveFileDialog saveFileDialog)
         {
             try
             {
@@ -144,7 +105,7 @@ namespace Word_Processor
                                                         MessageBoxButtons.YesNo,
                                                         MessageBoxIcon.Question);
 
-                    if (answer == DialogResult.Yes) return;
+                    if (answer == DialogResult.Yes) HandleSave(form, magicSpellBox, saveFileDialog);
                     else
                     {
                         magicSpellBox.Modified = false;
