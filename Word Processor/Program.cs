@@ -13,7 +13,7 @@ namespace Rich_Text_Processor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWindow());
+            Application.Run(new MainForm());
         }
     }
 }

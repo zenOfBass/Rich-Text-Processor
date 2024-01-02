@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Rich_Text_Processor
 { // open namespace
-    public partial class MainWindow : Form
+    public partial class MainForm : Form
     { // open class
-        public MainWindow() => InitializeComponent();
+        public MainForm() => InitializeComponent();
 
         private string CurrentFile { get; set; }
         private int LinesPrinted { get; set; }
@@ -464,8 +464,6 @@ namespace Rich_Text_Processor
             try
             {
                 magicSpellBox.SetAlignment(TextAlignment.Left);
-                buttonAlignCenter.Checked = false;
-                buttonAlignRight.Checked = false;
             }
             catch
             {
@@ -478,8 +476,6 @@ namespace Rich_Text_Processor
             try
             {
                 magicSpellBox.SetAlignment(TextAlignment.Center);
-                buttonAlignRight.Checked = false;
-                buttonAlignLeft.Checked = false;
             }
             catch
             {
@@ -492,8 +488,6 @@ namespace Rich_Text_Processor
             try
             {
                 magicSpellBox.SetAlignment(TextAlignment.Right);
-                buttonAlignCenter.Checked = false;
-                buttonAlignLeft.Checked = false;
             }
             catch
             {

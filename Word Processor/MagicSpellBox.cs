@@ -77,27 +77,16 @@ namespace Rich_Text_Processor
         }
 
         public RichTextBox Box { get; }
-
         public void SelectAll() => Box.SelectAll();
-
         public void Copy() => Box.Copy();
-
         public void Cut() => Box.Cut();
-
         public void Paste() => Box.Paste();
-
         public bool CanUndo => Box.CanUndo;
-
         public bool CanRedo => Box.CanRedo;
-
         public void Undo() => Box.Undo();
-
         public void Redo() => Box.Redo();
-
         public string SelectedText => Box.Selection.Text;
-
         private Font ConvertToFont(object fontFamily, object fontSize) => new Font(fontFamily as string, (float)(double)Convert.ToDouble(fontSize));
-
 
         public Font SelectionFont
         {
