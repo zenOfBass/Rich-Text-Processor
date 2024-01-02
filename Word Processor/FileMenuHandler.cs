@@ -1,10 +1,9 @@
-﻿using Rich_Text_Processor;
-using System.IO;
+﻿using System.IO;
 using System.Media;
 using System.Windows.Documents;
 using System.Windows.Forms;
 
-namespace Word_Processor
+namespace Rich_Text_Processor
 {
     public static class FileMenuHandler
     {

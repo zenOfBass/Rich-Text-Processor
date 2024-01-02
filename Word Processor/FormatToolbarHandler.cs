@@ -1,9 +1,8 @@
-﻿using Rich_Text_Processor;
-using System.Media;
+﻿using System.Media;
 using System.Windows;
 using System.Windows.Forms;
 
-namespace Word_Processor
+namespace Rich_Text_Processor
 {
     public static class FormatToolbarHandler
     {

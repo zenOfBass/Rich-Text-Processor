@@ -1,10 +1,9 @@
-﻿using Rich_Text_Processor;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Printing;
 using System.Media;
 using System.Windows.Forms;
 
-namespace Word_Processor
+namespace Rich_Text_Processor
 {
     public static class PublishMenuHandler
     {
