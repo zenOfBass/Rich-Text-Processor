@@ -427,13 +427,7 @@ namespace Rich_Text_Processor
         {
             try
             {
-                if (magicSpellBox.Box.Selection != null && !magicSpellBox.Box.Selection.IsEmpty)
-                {
-                    var currentFont = new FontFamily(magicSpellBox.Box.Selection.GetPropertyValue(TextElement.FontFamilyProperty).ToString());
-                    var currentSize = magicSpellBox.Box.Selection.GetPropertyValue(TextElement.FontSizeProperty);
-                    var currentWeight = magicSpellBox.Box.Selection.GetPropertyValue(TextElement.FontWeightProperty);
-                    magicSpellBox.Box.Selection.ApplyPropertyValue(TextElement.FontWeightProperty, (currentWeight != null && currentWeight.Equals(FontWeights.Bold)) ? FontWeights.Normal : FontWeights.Bold);
-                }
+                magicSpellBox.Bold();
             }
             catch
             {
@@ -445,13 +439,7 @@ namespace Rich_Text_Processor
         {
             try
             {
-                if (magicSpellBox.Box.Selection != null && !magicSpellBox.Box.Selection.IsEmpty)
-                {
-                    var currentFont = new FontFamily(magicSpellBox.Box.Selection.GetPropertyValue(TextElement.FontFamilyProperty).ToString());
-                    var currentSize = magicSpellBox.Box.Selection.GetPropertyValue(TextElement.FontSizeProperty);
-                    var currentStyle = magicSpellBox.Box.Selection.GetPropertyValue(TextElement.FontStyleProperty);
-                    magicSpellBox.Box.Selection.ApplyPropertyValue(TextElement.FontStyleProperty, (currentStyle != null && currentStyle.Equals(FontStyles.Italic)) ? FontStyles.Normal : FontStyles.Italic);
-                }
+                magicSpellBox.Italic();
             }
             catch
             {
@@ -463,11 +451,7 @@ namespace Rich_Text_Processor
         {
             try
             {
-                if (magicSpellBox.SelectionFont != null)
-                {
-                    TextRange selectedText = new TextRange(magicSpellBox.Box.Selection.Start, magicSpellBox.Box.Selection.End);
-                    selectedText.ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Underline);
-                }
+                magicSpellBox.Underline();
             }
             catch
             {
@@ -521,22 +505,7 @@ namespace Rich_Text_Processor
         {
             try
             {
-                if (!new TextRange(magicSpellBox.Box.Selection.Start, magicSpellBox.Box.Selection.End).IsEmpty)                            // Check if the selection is empty
-                {
-                    string[] lines = new TextRange(magicSpellBox.Box.Selection.Start, magicSpellBox.Box.Selection.End).Text.Split('\n');   // Split the selected text into lines
-                    new TextRange(magicSpellBox.Box.Selection.Start, magicSpellBox.Box.Selection.End).Text = "";                           // Clear the existing selection
-
-                    foreach (string line in lines)                                                                                         // Insert a bullet point at the beginning of each line
-                    {
-                        if (!string.IsNullOrWhiteSpace(line))                                                                              // Check if the line is not empty
-                        {
-                            magicSpellBox.Box.CaretPosition.InsertTextInRun("\u2022 " + line.Trim());
-                            magicSpellBox.Box.CaretPosition = magicSpellBox.Box.CaretPosition.GetPositionAtOffset(4 + line.Trim().Length); // Move the caret to the end of the inserted text
-                        }
-
-                        magicSpellBox.Box.CaretPosition.InsertParagraphBreak();                                                            // Insert a newline after each line
-                    }
-                }
+                magicSpellBox.Bullet();
             }
             catch
             {
