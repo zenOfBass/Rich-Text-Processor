@@ -22,7 +22,7 @@ namespace Rich_Text_Processor
         {
             Box = new RichTextBox();
             Box.IsReadOnly = false;
-            Box.TextChanged += (s, e) => MagicSpellBox_TextChanged(s, e);  // Fix: Attach the correct event handler
+            Box.TextChanged += (s, e) => MagicSpellBox_TextChanged(s, e);
             Box.SpellCheck.IsEnabled = true;
             Box.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
             base.Child = Box;
@@ -98,6 +98,7 @@ namespace Rich_Text_Processor
 
         private Font ConvertToFont(object fontFamily, object fontSize) => new Font(fontFamily as string, (float)(double)Convert.ToDouble(fontSize));
 
+
         public Font SelectionFont
         {
             get { return ConvertToFont(Box.Selection.GetPropertyValue(Control.FontFamilyProperty), Box.Selection.GetPropertyValue(Control.FontSizeProperty)); }
@@ -134,6 +135,49 @@ namespace Rich_Text_Processor
                 }
             }
             return runs;
+        }
+
+        public void Bold()
+        {
+            if (Box.Selection != null && !Box.Selection.IsEmpty)
+            {
+                var currentWeight = Box.Selection.GetPropertyValue(TextElement.FontWeightProperty);
+                Box.Selection.ApplyPropertyValue(TextElement.FontWeightProperty, (currentWeight != null && currentWeight.Equals(FontWeights.Bold)) ? FontWeights.Normal : FontWeights.Bold);
+            }
+        }
+
+        public void Italic()
+        {
+            if (Box.Selection != null && !Box.Selection.IsEmpty)
+            {
+                var currentStyle = Box.Selection.GetPropertyValue(TextElement.FontStyleProperty);
+                Box.Selection.ApplyPropertyValue(TextElement.FontStyleProperty, (currentStyle != null && currentStyle.Equals(FontStyles.Italic)) ? FontStyles.Normal : FontStyles.Italic);
+            }
+        }
+
+        public void Underline()
+        {
+            if (SelectionFont != null) new TextRange(Box.Selection.Start, Box.Selection.End).ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Underline);
+        }
+
+        public void Bullet()
+        {
+            if (!new TextRange(Box.Selection.Start, Box.Selection.End).IsEmpty)                            // Check if the selection is empty
+            {
+                string[] lines = new TextRange(Box.Selection.Start, Box.Selection.End).Text.Split('\n');   // Split the selected text into lines
+                new TextRange(Box.Selection.Start, Box.Selection.End).Text = "";                           // Clear the existing selection
+
+                foreach (string line in lines)                                                             // Insert a bullet point at the beginning of each line
+                {
+                    if (!string.IsNullOrWhiteSpace(line))                                                  // Check if the line is not empty
+                    {
+                        Box.CaretPosition.InsertTextInRun($"\u2022 {line.Trim()}");
+                        Box.CaretPosition = Box.CaretPosition.GetPositionAtOffset(4 + line.Trim().Length); // Move the caret to the end of the inserted text
+                    }
+
+                    Box.CaretPosition.InsertParagraphBreak();                                              // Insert a newline after each line
+                }
+            }
         }
 
         public void SetAlignment(TextAlignment alignment)
