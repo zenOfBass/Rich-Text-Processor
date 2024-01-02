@@ -55,7 +55,6 @@ namespace Word_Processor
 
             if (printDialog.PrinterSettings.PrintRange == PrintRange.Selection) Lines = magicSpellBox.SelectedText.Split(new char[] { '\n' });
             else Lines = magicSpellBox.Text.Split(new char[] { '\n' });
-
             int i = 0;
             foreach (string s in Lines) Lines[i++] = s.TrimEnd(new char[] { '\r' });
         }

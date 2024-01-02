@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Drawing;
 using System.Drawing.Printing;
 using System.Media;
-using System.Windows;
 using System.Windows.Forms;
 using Word_Processor;
 
@@ -14,7 +12,7 @@ namespace Rich_Text_Processor
 
         public string CurrentFile { get; set; }
 
-        #region File Menu Methods
+        #region File Menu
 
         private void NewToolStripMenuItem_Click(object sender, EventArgs e) => FileMenuHandler.HandleNew(this, magicSpellBox, saveFileDialog);
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e) => FileMenuHandler.HandleOpen(this, magicSpellBox, saveFileDialog, openFileDialog);
@@ -23,7 +21,7 @@ namespace Rich_Text_Processor
 
         #endregion
 
-        #region Edit Menu Methods
+        #region Edit Menu
 
         private void SelectAllToolStripMenuItem_Click(object sender, EventArgs e) => EditMenuHandler.HandleSelectAll(magicSpellBox);
         private void CopyToolStripMenuItem_Click(object sender, EventArgs e) => EditMenuHandler.HandleCopy(magicSpellBox);
@@ -34,7 +32,7 @@ namespace Rich_Text_Processor
 
         #endregion // end of edit menu
 
-        #region Publish Menu Methods
+        #region Publish Menu
 
         private void PreviewToolStripMenuItem_Click(object sender, EventArgs e) => PublishMenuHandler.HandlePreview(printPreviewDialog, printDocument);
         private void PrintToolStripMenuItem_Click(object sender, EventArgs e) => PublishMenuHandler.HandlePrint(printDialog, printDocument);
@@ -44,119 +42,17 @@ namespace Rich_Text_Processor
 
         #endregion // end of publish menu
 
-        #region Format Tool Methods
+        #region Format Tool
 
-        private void ButtonFontSelect_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (magicSpellBox.SelectionFont != null) fontDialog.Font = magicSpellBox.SelectionFont;
-                else fontDialog.Font = null;
-                fontDialog.ShowApply = true;
-                if (fontDialog.ShowDialog() == DialogResult.OK) magicSpellBox.SelectionFont = fontDialog.Font;
-            }
-            catch
-            {
-                SystemSounds.Hand.Play();
-            }
-        }
-
-        private void ButtonFontColor_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                colorDialog.Color = magicSpellBox.ForeColor;
-                if (colorDialog.ShowDialog() == DialogResult.OK) magicSpellBox.ApplySelectionForeground(colorDialog.Color); // Apply the color to the current selection if possible
-            }
-            catch
-            {
-                SystemSounds.Hand.Play();
-            }
-        }
-
-        private void ButtonBold_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                magicSpellBox.Bold();
-            }
-            catch
-            {
-                SystemSounds.Hand.Play();
-            }
-        }
-
-        private void ButtonItalic_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                magicSpellBox.Italic();
-            }
-            catch
-            {
-                SystemSounds.Hand.Play();
-            }
-        }
-
-        private void ButtonUnderline_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                magicSpellBox.Underline();
-            }
-            catch
-            {
-                SystemSounds.Hand.Play();
-            }
-        }
-
-        private void ButtonAlignLeft_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                magicSpellBox.SetAlignment(TextAlignment.Left);
-            }
-            catch
-            {
-                SystemSounds.Hand.Play();
-            }
-        }
-
-        private void ButtonAlignCenter_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                magicSpellBox.SetAlignment(TextAlignment.Center);
-            }
-            catch
-            {
-                SystemSounds.Hand.Play();
-            }
-        }
-
-        private void ButtonAlignRight_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                magicSpellBox.SetAlignment(TextAlignment.Right);
-            }
-            catch
-            {
-                SystemSounds.Hand.Play();
-            }
-        }
-
-        private void ButtonBullets_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                magicSpellBox.Bullet();
-            }
-            catch
-            {
-                SystemSounds.Hand.Play();
-            }
-        }
+        private void ButtonFontSelect_Click(object sender, EventArgs e) => FormatToolbarHandler.HandleFontSelect(magicSpellBox, fontDialog);
+        private void ButtonFontColor_Click(object sender, EventArgs e) => FormatToolbarHandler.HandleFontColor(magicSpellBox, colorDialog);
+        private void ButtonBold_Click(object sender, EventArgs e) => FormatToolbarHandler.HandleBold(magicSpellBox);
+        private void ButtonItalic_Click(object sender, EventArgs e) => FormatToolbarHandler.HandleItalic(magicSpellBox);
+        private void ButtonUnderline_Click(object sender, EventArgs e) => FormatToolbarHandler.HandleUnderline(magicSpellBox);
+        private void ButtonAlignLeft_Click(object sender, EventArgs e) => FormatToolbarHandler.HandleAlignLeft(magicSpellBox);
+        private void ButtonAlignCenter_Click(object sender, EventArgs e) => FormatToolbarHandler.HandleAlignCenter(magicSpellBox);
+        private void ButtonAlignRight_Click(object sender, EventArgs e) => FormatToolbarHandler.HandleAlignRight(magicSpellBox);
+        private void ButtonBullets_Click(object sender, EventArgs e) => FormatToolbarHandler.HandleBullets(magicSpellBox);
 
         #endregion // end format toolbar
 
