@@ -64,7 +64,7 @@ namespace Rich_Text_Processor
             {
                 if (magicSpellBox.Modified == true && string.IsNullOrEmpty(magicSpellBox.Text.Trim()))
                 {
-                    DialogResult answer = System.Windows.Forms.MessageBox.Show("Save current document before exiting?",
+                    DialogResult answer = MessageBox.Show("Save current document before exiting?",
                                             "Unsaved Document",
                                             MessageBoxButtons.YesNo,
                                             MessageBoxIcon.Question);

@@ -138,6 +138,7 @@ namespace Rich_Text_Processor
                     if (openFileDialog.FileName == "") return;
 
                     string strExt = Path.GetExtension(openFileDialog.FileName).ToUpper();
+
                     if (strExt == ".RTF")
                     {
                         var textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);

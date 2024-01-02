@@ -72,7 +72,7 @@ namespace Rich_Text_Processor
         public new UIElement Child
         {
             get => base.Child;
-            set { /* Do nothing */ }
+            set { /* Do nothing */ } // This must be done to fix an issue with the serializer
         }
 
         public void SelectAll() => Box.SelectAll();
