@@ -144,10 +144,7 @@ namespace Word_Processor
                                                         MessageBoxButtons.YesNo,
                                                         MessageBoxIcon.Question);
 
-                    if (answer == DialogResult.Yes)
-                    {
-                        return;
-                    }
+                    if (answer == DialogResult.Yes) return;
                     else
                     {
                         magicSpellBox.Modified = false;
