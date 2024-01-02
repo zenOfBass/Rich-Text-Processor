@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Drawing;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -32,20 +33,27 @@ namespace Rich_Text_Processor
             Text = "";
         }
 
+        public RichTextBox Box { get; }
+
+        [Browsable(true)]
+        [Category("Extended Properties")]
+        [Description("Set TextBox border Color")]
+        public bool Modified { get; set; }
+
         [Browsable(true)]
         [Category("Action")]
         [Description("Invoked when Text Changes")]
         public new event EventHandler TextChanged;
-        protected void MagicSpellBox_TextChanged(object sender, EventArgs e) => TextChanged?.Invoke(this, e);
+        protected void MagicSpellBox_TextChanged(object sender, EventArgs e)
+        {
+            TextChanged?.Invoke(this, e);
+            Modified = true;
+        }
 
         [DefaultValue(false)]
         public override string Text
         {
-            get
-            {
-                string richText = new TextRange(Box.Document.ContentStart, Box.Document.ContentEnd).Text;
-                return richText;
-            }
+            get => new TextRange(Box.Document.ContentStart, Box.Document.ContentEnd).Text;
             set
             {
                 Box.Document.Blocks.Clear();
@@ -56,48 +64,29 @@ namespace Rich_Text_Processor
         [DefaultValue(false)]
         public bool Multiline
         {
-            get { return Box.AcceptsReturn; }
-            set { Box.AcceptsReturn = value; }
+            get => Box.AcceptsReturn;
+            set => Box.AcceptsReturn = value;
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new UIElement Child
         {
-            get { return base.Child; }
-            set { /* Do nothing */ }
+            get => base.Child;
+            set { /* Do nothing */ } // This must be done to fix an issue with the serializer
         }
-
-        [Browsable(true)]
-        [Category("Extended Properties")]
-        [Description("Set TextBox border Color")]
-        public bool Modified
-        {
-            get;
-            set;
-        }
-
-        public RichTextBox Box { get; }
 
         public void SelectAll() => Box.SelectAll();
-
         public void Copy() => Box.Copy();
-
         public void Cut() => Box.Cut();
-
         public void Paste() => Box.Paste();
-
         public bool CanUndo => Box.CanUndo;
-
         public bool CanRedo => Box.CanRedo;
-
         public void Undo() => Box.Undo();
-
         public void Redo() => Box.Redo();
-
         public string SelectedText => Box.Selection.Text;
-
+        public int WordCount => Text.Trim().Split(new char[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Length;
+        public int CharCount => new TextRange(Box.Document.ContentStart, Box.Document.ContentEnd).Text.Count(c => !char.IsWhiteSpace(c));
         private Font ConvertToFont(object fontFamily, object fontSize) => new Font(fontFamily as string, (float)(double)Convert.ToDouble(fontSize));
-
 
         public Font SelectionFont
         {
