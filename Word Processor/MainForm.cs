@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
-using System.Linq;
 using System.Media;
 using System.Windows;
 using System.Windows.Documents;
@@ -26,11 +25,10 @@ namespace Rich_Text_Processor
             {
                 if (magicSpellBox.Modified)
                 {
-                    DialogResult answer;
-                    answer = System.Windows.Forms.MessageBox.Show("Save current document before creating new document?",
-                                                                "Unsaved Document",
-                                                                MessageBoxButtons.YesNo,
-                                                                MessageBoxIcon.Question);
+                    DialogResult answer = System.Windows.Forms.MessageBox.Show("Save current document before creating new document?",
+                                                                                "Unsaved Document",
+                                                                                MessageBoxButtons.YesNo,
+                                                                                MessageBoxIcon.Question);
                     if (answer == DialogResult.No)
                     {
                         CurrentFile = "";
@@ -70,11 +68,10 @@ namespace Rich_Text_Processor
             {
                 if (magicSpellBox.Modified)
                 {
-                    DialogResult answer;
-                    answer = System.Windows.Forms.MessageBox.Show("Save current file before opening another document?",
-                                                                "Unsaved Document",
-                                                                MessageBoxButtons.YesNo,
-                                                                MessageBoxIcon.Question);
+                    DialogResult answer = System.Windows.Forms.MessageBox.Show("Save current file before opening another document?",
+                                                                                "Unsaved Document",
+                                                                                MessageBoxButtons.YesNo,
+                                                                                MessageBoxIcon.Question);
                     if (answer == DialogResult.No)
                     {
                         magicSpellBox.Modified = false;
@@ -156,7 +153,7 @@ namespace Rich_Text_Processor
                     CurrentFile = saveFileDialog.FileName;
                     magicSpellBox.Modified = false;
                     Text = $"Editor: {CurrentFile}";
-                    System.Windows.Forms.MessageBox.Show(CurrentFile.ToString() + " saved.", "File Save");
+                    System.Windows.Forms.MessageBox.Show($"{CurrentFile.ToString()} saved.", "File Save");
                 }
                 else System.Windows.Forms.MessageBox.Show("Save File request cancelled by user.", "Cancelled");
             }
@@ -189,7 +186,7 @@ namespace Rich_Text_Processor
                     CurrentFile = saveFileDialog.FileName;
                     magicSpellBox.Modified = false;
                     Text = $"Editor: {CurrentFile}";
-                    System.Windows.Forms.MessageBox.Show(CurrentFile.ToString() + " saved.", "File Save");
+                    System.Windows.Forms.MessageBox.Show($"{CurrentFile.ToString()} saved.", "File Save");
                 }
                 else System.Windows.Forms.MessageBox.Show("Save File request cancelled by user.", "Cancelled");
             }
@@ -205,11 +202,10 @@ namespace Rich_Text_Processor
             {
                 if (magicSpellBox.Modified == true)
                 {
-                    DialogResult answer;
-                    answer = System.Windows.Forms.MessageBox.Show("Save this document before closing?",
-                                                                "Unsaved Document",
-                                                                MessageBoxButtons.YesNo,
-                                                                MessageBoxIcon.Question);
+                    DialogResult answer = System.Windows.Forms.MessageBox.Show("Save this document before closing?",
+                                                                                "Unsaved Document",
+                                                                                MessageBoxButtons.YesNo,
+                                                                                MessageBoxIcon.Question);
                     if (answer == DialogResult.Yes) return;
                     else
                     {
@@ -375,18 +371,20 @@ namespace Rich_Text_Processor
         {
             int x = e.MarginBounds.Left;
             int y = e.MarginBounds.Top;
-            Brush brush = new SolidBrush(magicSpellBox.ForeColor);
-
-            while (LinesPrinted < Lines.Length)
+            using (Brush brush = new SolidBrush(magicSpellBox.ForeColor))
             {
-                e.Graphics.DrawString(Lines[LinesPrinted++], magicSpellBox.Font, brush, x, y);
-                y += 15;
-                if (y >= e.MarginBounds.Bottom)
+                while (LinesPrinted < Lines.Length)
                 {
-                    e.HasMorePages = true;
-                    return;
+                    e.Graphics.DrawString(Lines[LinesPrinted++], magicSpellBox.Font, brush, x, y);
+                    y += 15;
+                    if (y >= e.MarginBounds.Bottom)
+                    {
+                        e.HasMorePages = true;
+                        return;
+                    }
                 }
             }
+
             LinesPrinted = 0;
             e.HasMorePages = false;
         }
@@ -517,11 +515,10 @@ namespace Rich_Text_Processor
             {
                 if (magicSpellBox.Modified == true)
                 {
-                    DialogResult answer;
-                    answer = System.Windows.Forms.MessageBox.Show("Save current document before exiting?",
-                                                                "Unsaved Document",
-                                                                MessageBoxButtons.YesNo,
-                                                                MessageBoxIcon.Question);
+                    DialogResult answer = System.Windows.Forms.MessageBox.Show("Save current document before exiting?",
+                                            "Unsaved Document",
+                                            MessageBoxButtons.YesNo,
+                                            MessageBoxIcon.Question);
                     if (answer == DialogResult.No)
                     {
                         magicSpellBox.Modified = false;
@@ -550,25 +547,10 @@ namespace Rich_Text_Processor
             TextChanged_CharacterCount();
         }
 
-        private void TextChanged_WordCount()
-        {
-            string text = magicSpellBox.Text.Trim();
+        private void TextChanged_WordCount() => labelWordCount.Text = string.IsNullOrEmpty(magicSpellBox.Text.Trim())
+                ? "0 words" : magicSpellBox.WordCount <= 1 ? "1 word" : $"{magicSpellBox.WordCount} words";
 
-            if (string.IsNullOrEmpty(text)) // Check if the text is empty
-            {
-                labelWordCount.Text = "0 words";
-                return;
-            }
-
-            string[] words = text.Split(new char[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            labelWordCount.Text = words.Length > 1 ? $"{words.Length} words" : "1 word";
-        }
-
-        private void TextChanged_CharacterCount()
-        {
-            TextRange textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);
-            labelCharCount.Text = $"{textRange.Text.Count(c => !char.IsWhiteSpace(c))} characters";
-        }
+        private void TextChanged_CharacterCount() => labelCharCount.Text = $"{magicSpellBox.CharCount} characters";
 
         #endregion // end word and character count
     } // close class
