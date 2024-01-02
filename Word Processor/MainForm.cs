@@ -6,6 +6,7 @@ using System.Media;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Forms;
+using Word_Processor;
 
 namespace Rich_Text_Processor
 { // open namespace
@@ -13,217 +14,17 @@ namespace Rich_Text_Processor
     { // open class
         public MainForm() => InitializeComponent();
 
-        private string CurrentFile { get; set; }
+        public string CurrentFile { get; set; }
         private int LinesPrinted { get; set; }
         private string[] Lines { get; set; }
 
         #region File Menu Methods
 
-        private void NewToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (magicSpellBox.Modified)
-                {
-                    DialogResult answer = System.Windows.Forms.MessageBox.Show("Save current document before creating new document?",
-                                                                                "Unsaved Document",
-                                                                                MessageBoxButtons.YesNo,
-                                                                                MessageBoxIcon.Question);
-                    if (answer == DialogResult.No)
-                    {
-                        CurrentFile = "";
-                        Text = "Editor: New Document";
-                        magicSpellBox.Modified = false;
-                        magicSpellBox.ResetText();
-                        return;
-                    }
-                    else
-                    {
-                        SaveToolStripMenuItem_Click(this, new EventArgs());
-                        magicSpellBox.Modified = false;
-                        magicSpellBox.ResetText();
-                        CurrentFile = "";
-                        Text = "Editor: New Document";
-                        return;
-                    }
-                }
-                else
-                {
-                    CurrentFile = "";
-                    Text = "Editor: New Document";
-                    magicSpellBox.Modified = false;
-                    magicSpellBox.ResetText();
-                    return;
-                }
-            }
-            catch
-            {
-                SystemSounds.Hand.Play();
-            }
-        }
-
-        private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (magicSpellBox.Modified)
-                {
-                    DialogResult answer = System.Windows.Forms.MessageBox.Show("Save current file before opening another document?",
-                                                                                "Unsaved Document",
-                                                                                MessageBoxButtons.YesNo,
-                                                                                MessageBoxIcon.Question);
-                    if (answer == DialogResult.No)
-                    {
-                        magicSpellBox.Modified = false;
-                        OpenFile();
-                    }
-                    else
-                    {
-                        SaveToolStripMenuItem_Click(this, new EventArgs());
-                        OpenFile();
-                    }
-                }
-                else OpenFile();
-            }
-            catch
-            {
-                SystemSounds.Hand.Play();
-            }
-        }
-
-        private void OpenFile()
-        {
-            try
-            {
-                openFileDialog.Title = "RTP - Open File";
-                openFileDialog.DefaultExt = "rtf";
-                openFileDialog.Filter = "Rich Text Files|*.rtf|Text Files|*.txt|HTML Files|*.htm|All Files|*.*";
-                openFileDialog.FilterIndex = 1;
-                openFileDialog.FileName = string.Empty;
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    if (openFileDialog.FileName == "") return;
-
-                    string strExt = Path.GetExtension(saveFileDialog.FileName).ToUpper();
-                    if (strExt == ".RTF")
-                    {
-                        var textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd); // Load RTF content into the MagicSpellBox
-                    }
-                    else
-                    {
-                        using (StreamReader txtReader = new StreamReader(openFileDialog.FileName)) magicSpellBox.Text = txtReader.ReadToEnd();
-                        TextRange textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd); // Set the selection range to the entire text
-                        magicSpellBox.Box.Selection.Select(textRange.Start, textRange.End);
-                    }
-                    CurrentFile = openFileDialog.FileName;
-                    magicSpellBox.Modified = false;
-                    Text = $"Editor: {CurrentFile}";
-                }
-                else System.Windows.Forms.MessageBox.Show("Open File request cancelled by user.", "Cancelled");
-            }
-            catch
-            {
-                SystemSounds.Hand.Play();
-            }
-        }
-
-        private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                saveFileDialog.Title = "RTP - Save File";
-                saveFileDialog.DefaultExt = "rtf";
-                saveFileDialog.Filter = "Rich Text Files|*.rtf|Text Files|*.txt|HTML Files|*.htm|All Files|*.*";
-                saveFileDialog.FilterIndex = 1;
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    if (saveFileDialog.FileName == "") return;
-
-                    string strExt = Path.GetExtension(saveFileDialog.FileName).ToUpper();
-                    if (strExt == ".RTF")
-                    {
-                        var textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);                      // Save RTF content from MagicSpellBox
-                        using (var fs = new FileStream(saveFileDialog.FileName, FileMode.Create)) textRange.Save(fs, System.Windows.Forms.DataFormats.Rtf);
-                    }
-                    else
-                    {
-                        using (StreamWriter txtWriter = new StreamWriter(saveFileDialog.FileName)) txtWriter.Write(magicSpellBox.Text);                     // Save plain text content from MagicSpellBox
-                        magicSpellBox.Box.Selection.Select(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentStart);
-                    }
-                    CurrentFile = saveFileDialog.FileName;
-                    magicSpellBox.Modified = false;
-                    Text = $"Editor: {CurrentFile}";
-                    System.Windows.Forms.MessageBox.Show($"{CurrentFile.ToString()} saved.", "File Save");
-                }
-                else System.Windows.Forms.MessageBox.Show("Save File request cancelled by user.", "Cancelled");
-            }
-            catch
-            {
-                SystemSounds.Hand.Play();
-            }
-        }
-
-        private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                saveFileDialog.Title = "RTP - Save File";
-                saveFileDialog.DefaultExt = "rtf";
-                saveFileDialog.Filter = "Rich Text Files|*.rtf|Text Files|*.txt|HTML Files|*.htm|All Files|*.*";
-                saveFileDialog.FilterIndex = 1;
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    if (saveFileDialog.FileName == "") return;
-
-                    string strExt = Path.GetExtension(saveFileDialog.FileName).ToUpper();
-                    if (strExt == ".RTF")
-                    {
-                        var textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);                                                                          // Save RTF content from the MagicSpellBox
-                        using (var fs = new FileStream(saveFileDialog.FileName, FileMode.Create)) textRange.Save(fs, System.Windows.Forms.DataFormats.Rtf);
-                    }
-                    else using (var txtWriter = new StreamWriter(saveFileDialog.FileName)) txtWriter.Write(new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd).Text); // Save plain text content from the MagicSpellBox
-                    magicSpellBox.Box.Selection.Select(magicSpellBox.Box.Document.ContentEnd, magicSpellBox.Box.Document.ContentEnd);                                                                           // Clear the selection
-                    CurrentFile = saveFileDialog.FileName;
-                    magicSpellBox.Modified = false;
-                    Text = $"Editor: {CurrentFile}";
-                    System.Windows.Forms.MessageBox.Show($"{CurrentFile.ToString()} saved.", "File Save");
-                }
-                else System.Windows.Forms.MessageBox.Show("Save File request cancelled by user.", "Cancelled");
-            }
-            catch
-            {
-                SystemSounds.Hand.Play();
-            }
-        }
-
-        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (magicSpellBox.Modified == true)
-                {
-                    DialogResult answer = System.Windows.Forms.MessageBox.Show("Save this document before closing?",
-                                                                                "Unsaved Document",
-                                                                                MessageBoxButtons.YesNo,
-                                                                                MessageBoxIcon.Question);
-                    if (answer == DialogResult.Yes) return;
-                    else
-                    {
-                        magicSpellBox.Modified = false;
-                        System.Windows.Forms.Application.Exit();
-                    }
-                }
-                else
-                {
-                    magicSpellBox.Modified = false;
-                    System.Windows.Forms.Application.Exit();
-                }
-            }
-            catch
-            {
-                SystemSounds.Hand.Play();
-            }
-        }
+        private void NewToolStripMenuItem_Click(object sender, EventArgs e) => FileMenuHandler.HandleNew(this, magicSpellBox, saveFileDialog);
+        private void OpenToolStripMenuItem_Click(object sender, EventArgs e) => FileMenuHandler.HandleOpen(this, magicSpellBox, saveFileDialog, openFileDialog);
+        private void SaveToolStripMenuItem_Click(object sender, EventArgs e) => FileMenuHandler.HandleSave(this, magicSpellBox, saveFileDialog);
+        private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e) => FileMenuHandler.HandleSaveAs(this, magicSpellBox, saveFileDialog);
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e) => FileMenuHandler.HandleExit(this, magicSpellBox);
 
         #endregion
 
