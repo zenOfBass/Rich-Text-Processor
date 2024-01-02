@@ -13,8 +13,6 @@ namespace Rich_Text_Processor
         public MainForm() => InitializeComponent();
 
         public string CurrentFile { get; set; }
-        private int LinesPrinted { get; set; }
-        private string[] Lines { get; set; }
 
         #region File Menu Methods
 
@@ -38,77 +36,11 @@ namespace Rich_Text_Processor
 
         #region Publish Menu Methods
 
-        private void PreviewToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                printPreviewDialog.Document = printDocument;
-                printPreviewDialog.ShowDialog();
-            }
-            catch
-            {
-                SystemSounds.Hand.Play();
-            }
-        }
-
-        private void PrintToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                printDialog.Document = printDocument;
-                if (printDialog.ShowDialog() == DialogResult.OK) printDocument.Print();
-            }
-            catch
-            {
-                SystemSounds.Hand.Play();
-            }
-        }
-
-        private void PageSetupToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                pageSetupDialog.Document = printDocument;
-                pageSetupDialog.ShowDialog();
-            }
-            catch
-            {
-                SystemSounds.Hand.Play();
-            }
-        }
-
-        private void PrintDocument_BeginPrint(object sender, PrintEventArgs e)
-        {
-            char[] param = { '\n' };
-
-            if (printDialog.PrinterSettings.PrintRange == PrintRange.Selection) Lines = magicSpellBox.SelectedText.Split(param);
-            else Lines = magicSpellBox.Text.Split(param);
-            int i = 0;
-            char[] trimParam = { '\r' };
-            foreach (string s in Lines) Lines[i++] = s.TrimEnd(trimParam);
-        }
-
-        private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
-        {
-            int x = e.MarginBounds.Left;
-            int y = e.MarginBounds.Top;
-            using (Brush brush = new SolidBrush(magicSpellBox.ForeColor))
-            {
-                while (LinesPrinted < Lines.Length)
-                {
-                    e.Graphics.DrawString(Lines[LinesPrinted++], magicSpellBox.Font, brush, x, y);
-                    y += 15;
-                    if (y >= e.MarginBounds.Bottom)
-                    {
-                        e.HasMorePages = true;
-                        return;
-                    }
-                }
-            }
-
-            LinesPrinted = 0;
-            e.HasMorePages = false;
-        }
+        private void PreviewToolStripMenuItem_Click(object sender, EventArgs e) => PublishMenuHandler.HandlePreview(printPreviewDialog, printDocument);
+        private void PrintToolStripMenuItem_Click(object sender, EventArgs e) => PublishMenuHandler.HandlePrint(printDialog, printDocument);
+        private void PageSetupToolStripMenuItem_Click(object sender, EventArgs e) => PublishMenuHandler.HandlePageSetup(pageSetupDialog, printDocument);
+        private void PrintDocument_BeginPrint(object sender, PrintEventArgs e) => PublishMenuHandler.HandleBeginPrint(magicSpellBox, printDialog, printDocument, e);
+        private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e) => PublishMenuHandler.HandlePrintPage(magicSpellBox, e);
 
         #endregion // end of publish menu
 
