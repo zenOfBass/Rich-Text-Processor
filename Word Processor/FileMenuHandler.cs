@@ -86,7 +86,7 @@ namespace Word_Processor
                     form.Text = $"Editor: {form.CurrentFile}";
                     MessageBox.Show($"{form.CurrentFile} saved.", "File Save");
                 }
-                else MessageBox.Show("Save File request cancelled by user.", "Cancelled");
+                else MessageBox.Show("Save File request canceled by user.", "Canceled");
             }
             catch
             {
@@ -154,7 +154,7 @@ namespace Word_Processor
                     magicSpellBox.Modified = false;
                     form.Text = $"Editor: {form.CurrentFile}";
                 }
-                else MessageBox.Show("Open File request cancelled by user.", "Cancelled");
+                else MessageBox.Show("Open File request canceled by user.", "Canceled");
             }
             catch
             {

@@ -305,7 +305,7 @@ namespace Rich_Text_Processor
 
         #endregion // end format toolbar
 
-        #region Form Closing Handler
+        #region Main Form Closing
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
