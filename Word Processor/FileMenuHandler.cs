@@ -12,7 +12,7 @@ namespace Word_Processor
         {
             try
             {
-                if (magicSpellBox.Modified)
+                if (magicSpellBox.Modified && string.IsNullOrEmpty(magicSpellBox.Text.Trim()))
                 {
                     DialogResult answer = MessageBox.Show("Save current document before creating new document?",
                                                         "Unsaved Document",
@@ -37,7 +37,7 @@ namespace Word_Processor
         {
             try
             {
-                if (magicSpellBox.Modified)
+                if (magicSpellBox.Modified && string.IsNullOrEmpty(magicSpellBox.Text.Trim()))
                 {
                     DialogResult answer = MessageBox.Show("Save current file before opening another document?",
                                                         "Unsaved Document",
@@ -98,7 +98,7 @@ namespace Word_Processor
         {
             try
             {
-                if (magicSpellBox.Modified)
+                if (magicSpellBox.Modified && string.IsNullOrEmpty(magicSpellBox.Text.Trim()))
                 {
                     DialogResult answer = MessageBox.Show("Save this document before closing?",
                                                         "Unsaved Document",

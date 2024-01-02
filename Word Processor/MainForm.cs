@@ -27,89 +27,12 @@ namespace Rich_Text_Processor
 
         #region Edit Menu Methods
 
-        private void SelectAllToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                magicSpellBox.SelectAll();
-            }
-            catch (Exception)
-            {
-                System.Windows.Forms.MessageBox.Show("Unable to select all document content.",
-                                                    "RTE - Select",
-                                                    MessageBoxButtons.OK,
-                                                    MessageBoxIcon.Error);
-            }
-        }
-
-        private void CopyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                magicSpellBox.Copy();
-            }
-            catch (Exception)
-            {
-                System.Windows.Forms.MessageBox.Show("Unable to copy document content.",
-                                                    "RTE - Copy",
-                                                    MessageBoxButtons.OK,
-                                                    MessageBoxIcon.Error);
-            }
-        }
-
-        private void CutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                magicSpellBox.Cut();
-            }
-            catch
-            {
-                System.Windows.Forms.MessageBox.Show("Unable to cut document content.",
-                                                    "RTE - Cut",
-                                                    MessageBoxButtons.OK,
-                                                    MessageBoxIcon.Error);
-            }
-        }
-
-        private void PasteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                magicSpellBox.Paste();
-            }
-            catch
-            {
-                System.Windows.Forms.MessageBox.Show("Unable to copy clipboard content to document.",
-                                                    "RTE - Paste",
-                                                    MessageBoxButtons.OK,
-                                                    MessageBoxIcon.Error);
-            }
-        }
-
-        private void UndoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (magicSpellBox.CanUndo) magicSpellBox.Undo();
-            }
-            catch
-            {
-                SystemSounds.Hand.Play();
-            }
-        }
-
-        private void RedoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (magicSpellBox.CanRedo) magicSpellBox.Redo();
-            }
-            catch
-            {
-                SystemSounds.Hand.Play();
-            }
-        }
+        private void SelectAllToolStripMenuItem_Click(object sender, EventArgs e) => EditMenuHandler.HandleSelectAll(magicSpellBox);
+        private void CopyToolStripMenuItem_Click(object sender, EventArgs e) => EditMenuHandler.HandleCopy(magicSpellBox);
+        private void CutToolStripMenuItem_Click(object sender, EventArgs e) => EditMenuHandler.HandleCut(magicSpellBox);
+        private void PasteToolStripMenuItem_Click(object sender, EventArgs e) => EditMenuHandler.HandlePaste(magicSpellBox);
+        private void UndoToolStripMenuItem_Click(object sender, EventArgs e) => EditMenuHandler.HandleUndo(magicSpellBox);
+        private void RedoToolStripMenuItem_Click(object sender, EventArgs e) => EditMenuHandler.HandleRedo(magicSpellBox);
 
         #endregion // end of edit menu
 
@@ -311,7 +234,7 @@ namespace Rich_Text_Processor
         {
             try
             {
-                if (magicSpellBox.Modified == true)
+                if (magicSpellBox.Modified == true && string.IsNullOrEmpty(magicSpellBox.Text.Trim()))
                 {
                     DialogResult answer = System.Windows.Forms.MessageBox.Show("Save current document before exiting?",
                                             "Unsaved Document",
