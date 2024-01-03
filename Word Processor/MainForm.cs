@@ -4,12 +4,13 @@ using System.Media;
 using System.Windows.Forms;
 
 namespace Rich_Text_Processor
-{ // open namespace
+{
     public partial class MainForm : Form
-    { // open class
+    {
         public MainForm()
         {
             InitializeComponent();
+            magicSpellBox.Text = string.Empty;
         }
 
         public string CurrentFile { get; set; }
@@ -144,7 +145,6 @@ namespace Rich_Text_Processor
                 }
                 else magicSpellBox.ResetText();
                 CurrentFile = "";
-                Text = "Editor: New Document";
             }
             catch
             {
@@ -153,5 +153,5 @@ namespace Rich_Text_Processor
         }
 
         #endregion // end form closing handler
-    } // close class
-} // close namespace
+    }
+}

@@ -30,14 +30,13 @@ namespace Rich_Text_Processor
             Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular);
             Multiline = true;
             Size = new System.Drawing.Size(100, 20);
-            Text = "";
         }
 
         public RichTextBox Box { get; }
 
         [Browsable(true)]
         [Category("Extended Properties")]
-        [Description("Set TextBox border Color")]
+        [Description("Set if the RichTextBox's Text has been changed")]
         public bool Modified { get; set; }
 
         [Browsable(true)]
