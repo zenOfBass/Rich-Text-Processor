@@ -57,6 +57,7 @@
     <Compile Include="EditMenuHandler.cs" />
     <Compile Include="FileMenuHandler.cs" />
     <Compile Include="FormatToolbarHandler.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -136,7 +136,7 @@ namespace Rich_Text_Processor
                         magicSpellBox.ResetText();
                         return;
                     }
-                    else SaveToolStripMenuItem_Click(this, new EventArgs());
+                    else FileMenuHandler.HandleSave(this, magicSpellBox, saveFileDialog);
                 }
                 else magicSpellBox.ResetText();
                 CurrentFile = "";
