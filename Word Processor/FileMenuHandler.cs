@@ -11,7 +11,7 @@ namespace Rich_Text_Processor
         {
             try
             {
-                if (magicSpellBox.Modified && string.IsNullOrEmpty(magicSpellBox.Text.Trim()))
+                if (magicSpellBox.Modified && !string.IsNullOrEmpty(magicSpellBox.Text.Trim()))
                 {
                     DialogResult answer = MessageBox.Show("Save current document before creating new document?",
                                                         "Unsaved Document",
@@ -36,7 +36,7 @@ namespace Rich_Text_Processor
         {
             try
             {
-                if (magicSpellBox.Modified && string.IsNullOrEmpty(magicSpellBox.Text.Trim()))
+                if (magicSpellBox.Modified && !string.IsNullOrEmpty(magicSpellBox.Text.Trim()))
                 {
                     DialogResult answer = MessageBox.Show("Save current file before opening another document?",
                                                         "Unsaved Document",
@@ -97,7 +97,7 @@ namespace Rich_Text_Processor
         {
             try
             {
-                if (magicSpellBox.Modified && string.IsNullOrEmpty(magicSpellBox.Text.Trim()))
+                if (magicSpellBox.Modified && !string.IsNullOrEmpty(magicSpellBox.Text.Trim()))
                 {
                     DialogResult answer = MessageBox.Show("Save this document before closing?",
                                                         "Unsaved Document",

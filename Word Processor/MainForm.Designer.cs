@@ -96,9 +96,9 @@
             this.buttonAlignRight,
             this.toolStripSeparator3,
             this.toolStripButton4});
-            this.toolStrip.Location = new System.Drawing.Point(0, 28);
+            this.toolStrip.Location = new System.Drawing.Point(0, 30);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(954, 27);
+            this.toolStrip.Size = new System.Drawing.Size(954, 31);
             this.toolStrip.TabIndex = 2;
             this.toolStrip.Text = "toolStrip";
             // 
@@ -108,7 +108,7 @@
             this.buttonBold.Image = global::Word_Processor.Properties.Resources.bold;
             this.buttonBold.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonBold.Name = "buttonBold";
-            this.buttonBold.Size = new System.Drawing.Size(29, 24);
+            this.buttonBold.Size = new System.Drawing.Size(29, 28);
             this.buttonBold.Text = "Bold";
             this.buttonBold.Click += new System.EventHandler(this.ButtonBold_Click);
             // 
@@ -118,7 +118,7 @@
             this.buttonItalic.Image = global::Word_Processor.Properties.Resources.italic;
             this.buttonItalic.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonItalic.Name = "buttonItalic";
-            this.buttonItalic.Size = new System.Drawing.Size(29, 24);
+            this.buttonItalic.Size = new System.Drawing.Size(29, 28);
             this.buttonItalic.Text = "Italic";
             this.buttonItalic.Click += new System.EventHandler(this.ButtonItalic_Click);
             // 
@@ -128,14 +128,14 @@
             this.buttonUnderline.Image = global::Word_Processor.Properties.Resources.underline;
             this.buttonUnderline.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonUnderline.Name = "buttonUnderline";
-            this.buttonUnderline.Size = new System.Drawing.Size(29, 24);
+            this.buttonUnderline.Size = new System.Drawing.Size(29, 28);
             this.buttonUnderline.Text = "Underline";
             this.buttonUnderline.Click += new System.EventHandler(this.ButtonUnderline_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 31);
             // 
             // buttonFontSelect
             // 
@@ -143,7 +143,7 @@
             this.buttonFontSelect.Image = global::Word_Processor.Properties.Resources.font_size;
             this.buttonFontSelect.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonFontSelect.Name = "buttonFontSelect";
-            this.buttonFontSelect.Size = new System.Drawing.Size(29, 24);
+            this.buttonFontSelect.Size = new System.Drawing.Size(29, 28);
             this.buttonFontSelect.Text = "Font Selection";
             this.buttonFontSelect.Click += new System.EventHandler(this.ButtonFontSelect_Click);
             // 
@@ -153,14 +153,14 @@
             this.buttonFontColor.Image = global::Word_Processor.Properties.Resources.font_color;
             this.buttonFontColor.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonFontColor.Name = "buttonFontColor";
-            this.buttonFontColor.Size = new System.Drawing.Size(29, 24);
+            this.buttonFontColor.Size = new System.Drawing.Size(29, 28);
             this.buttonFontColor.Text = "Font Color";
             this.buttonFontColor.Click += new System.EventHandler(this.ButtonFontColor_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 31);
             // 
             // buttonAlignLeft
             // 
@@ -168,7 +168,7 @@
             this.buttonAlignLeft.Image = global::Word_Processor.Properties.Resources.align_left;
             this.buttonAlignLeft.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonAlignLeft.Name = "buttonAlignLeft";
-            this.buttonAlignLeft.Size = new System.Drawing.Size(29, 24);
+            this.buttonAlignLeft.Size = new System.Drawing.Size(29, 28);
             this.buttonAlignLeft.Text = "Align Left";
             this.buttonAlignLeft.Click += new System.EventHandler(this.ButtonAlignLeft_Click);
             // 
@@ -178,7 +178,7 @@
             this.buttonAlignCenter.Image = global::Word_Processor.Properties.Resources.align_center;
             this.buttonAlignCenter.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonAlignCenter.Name = "buttonAlignCenter";
-            this.buttonAlignCenter.Size = new System.Drawing.Size(29, 24);
+            this.buttonAlignCenter.Size = new System.Drawing.Size(29, 28);
             this.buttonAlignCenter.Text = "Center";
             this.buttonAlignCenter.Click += new System.EventHandler(this.ButtonAlignCenter_Click);
             // 
@@ -188,14 +188,14 @@
             this.buttonAlignRight.Image = global::Word_Processor.Properties.Resources.align_right;
             this.buttonAlignRight.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonAlignRight.Name = "buttonAlignRight";
-            this.buttonAlignRight.Size = new System.Drawing.Size(29, 24);
+            this.buttonAlignRight.Size = new System.Drawing.Size(29, 28);
             this.buttonAlignRight.Text = "Align Right";
             this.buttonAlignRight.Click += new System.EventHandler(this.ButtonAlignRight_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 27);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 31);
             // 
             // toolStripButton4
             // 
@@ -203,7 +203,7 @@
             this.toolStripButton4.Image = global::Word_Processor.Properties.Resources.list_check;
             this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(29, 24);
+            this.toolStripButton4.Size = new System.Drawing.Size(29, 28);
             this.toolStripButton4.Text = "Bulleted List";
             this.toolStripButton4.Click += new System.EventHandler(this.ButtonBullets_Click);
             // 
@@ -264,7 +264,7 @@
             this.publishToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(954, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(954, 30);
             this.menuStrip1.TabIndex = 6;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -276,34 +276,34 @@
             this.saveToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 26);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.NewToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
@@ -317,7 +317,7 @@
             this.cutToolStripMenuItem,
             this.pasteToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(49, 24);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(49, 26);
             this.editToolStripMenuItem.Text = "Edit";
             // 
             // undoToolStripMenuItem
@@ -369,7 +369,7 @@
             this.previewToolStripMenuItem,
             this.printToolStripMenuItem});
             this.publishToolStripMenuItem.Name = "publishToolStripMenuItem";
-            this.publishToolStripMenuItem.Size = new System.Drawing.Size(70, 24);
+            this.publishToolStripMenuItem.Size = new System.Drawing.Size(70, 26);
             this.publishToolStripMenuItem.Text = "Publish";
             // 
             // pageSetupToolStripMenuItem
@@ -397,14 +397,14 @@
             // 
             this.magicSpellBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.magicSpellBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.magicSpellBox.Location = new System.Drawing.Point(0, 55);
-            this.magicSpellBox.Modified = false;
+            this.magicSpellBox.Location = new System.Drawing.Point(0, 61);
+            this.magicSpellBox.Modified = true;
             this.magicSpellBox.Multiline = true;
             this.magicSpellBox.Name = "magicSpellBox";
             this.magicSpellBox.SelectionFont = new System.Drawing.Font("Microsoft Sans Serif", 13.33333F);
-            this.magicSpellBox.Size = new System.Drawing.Size(954, 640);
+            this.magicSpellBox.Size = new System.Drawing.Size(954, 634);
             this.magicSpellBox.TabIndex = 7;
-            this.magicSpellBox.Text = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n";
+            this.magicSpellBox.Text = "\r\n\r\n\r\n";
             this.magicSpellBox.TextChanged += new System.EventHandler(this.TextChanged);
             // 
             // MainForm
