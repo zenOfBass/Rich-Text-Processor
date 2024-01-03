@@ -8,7 +8,7 @@ namespace Rich_Text_Processor
     public static class PublishMenuHandler
     {
         public static string[] Lines { get; set; }
-        public static int LinesPrinted { get; set; }
+        private static int LinesPrinted { get; set; }
 
         public static void HandlePreview(PrintPreviewDialog printPreviewDialog, PrintDocument printDocument)
         {
@@ -49,9 +49,8 @@ namespace Rich_Text_Processor
             }
         }
 
-        public static void HandleBeginPrint(MagicSpellBox magicSpellBox, PrintDialog printDialog, PrintDocument printDocument, PrintEventArgs e)
+        public static void HandleBeginPrint(MagicSpellBox magicSpellBox, PrintDialog printDialog)
         {
-
             if (printDialog.PrinterSettings.PrintRange == PrintRange.Selection) Lines = magicSpellBox.SelectedText.Split(new char[] { '\n' });
             else Lines = magicSpellBox.Text.Split(new char[] { '\n' });
             int i = 0;

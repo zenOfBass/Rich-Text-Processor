@@ -40,7 +40,7 @@ namespace Rich_Text_Processor
         private void PreviewToolStripMenuItem_Click(object sender, EventArgs e) => PublishMenuHandler.HandlePreview(printPreviewDialog, printDocument);
         private void PrintToolStripMenuItem_Click(object sender, EventArgs e) => PublishMenuHandler.HandlePrint(printDialog, printDocument);
         private void PageSetupToolStripMenuItem_Click(object sender, EventArgs e) => PublishMenuHandler.HandlePageSetup(pageSetupDialog, printDocument);
-        private void PrintDocument_BeginPrint(object sender, PrintEventArgs e) => PublishMenuHandler.HandleBeginPrint(magicSpellBox, printDialog, printDocument, e);
+        private void PrintDocument_BeginPrint(object sender, PrintEventArgs e) => PublishMenuHandler.HandleBeginPrint(magicSpellBox, printDialog);
         private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e) => PublishMenuHandler.HandlePrintPage(magicSpellBox, e);
 
         #endregion // end of publish menu
