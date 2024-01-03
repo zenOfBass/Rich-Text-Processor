@@ -398,13 +398,13 @@
             this.magicSpellBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.magicSpellBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.magicSpellBox.Location = new System.Drawing.Point(0, 55);
-            this.magicSpellBox.Modified = false;
+            this.magicSpellBox.Modified = true;
             this.magicSpellBox.Multiline = true;
             this.magicSpellBox.Name = "magicSpellBox";
             this.magicSpellBox.SelectionFont = new System.Drawing.Font("Microsoft Sans Serif", 13.33333F);
             this.magicSpellBox.Size = new System.Drawing.Size(954, 640);
             this.magicSpellBox.TabIndex = 7;
-            this.magicSpellBox.Text = "\r\n";
+            this.magicSpellBox.Text = "\r\n\r\n";
             this.magicSpellBox.TextChanged += new System.EventHandler(this.TextChanged);
             // 
             // MainForm

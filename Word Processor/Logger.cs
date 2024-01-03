@@ -3,26 +3,43 @@ using System.IO;
 
 namespace Rich_Text_Processor
 {
+    public enum LogLevel
+    {
+        Info,
+        Warning,
+        Error
+    }
+
     public static class Logger
     {
-        static Logger() => File.WriteAllText(LogFilePath, string.Empty); // Ensure the log file is created or cleared when the application starts.
+        static Logger() => File.WriteAllText(LogFilePath, string.Empty);
 
-        public static object LockObj { get; } = new object();
+        private static readonly object LockObj = new object();
 
-        public static string LogFilePath { get; } = "Rich_Text_Processor.log.rtf";
+        public static string LogFilePath { get; private set; } = "Rich_Text_Processor.log.rtf";
 
-        public static void LogError(string message) => LogMessage($"ERROR: {message}");
+        public static void SetLogFilePath(string path)
+        {
+            if (!string.IsNullOrEmpty(path)) LogFilePath = path;
+        }
 
-        public static void LogInfo(string message) => LogMessage($"INFO: {message}");
-
-        private static void LogMessage(string message)
+        public static void Log(LogLevel level, string message)
         {
             lock (LockObj)
             {
-                string formattedMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {message}";
+                string formattedMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {level}: {message}";
                 Console.WriteLine(formattedMessage);
 
-                File.AppendAllText(LogFilePath, $@"\par {formattedMessage}\par\par"); // Append the log entry to the RTF file.
+                // Using different RTF formatting based on log level
+                string rtfFormatting = level switch
+                {
+                    LogLevel.Info => @"\cf0",
+                    LogLevel.Warning => @"\cf1",
+                    LogLevel.Error => @"\cf2",
+                    _ => @"\cf0", // Default to INFO
+                };
+
+                File.AppendAllText(LogFilePath, $@"\par {rtfFormatting} {formattedMessage}\par\par");
             }
         }
     }
