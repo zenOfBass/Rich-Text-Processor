@@ -21,13 +21,7 @@ namespace Rich_Text_Processor
     {
         public MagicSpellBox()
         {
-            Box = new RichTextBox
-            {
-                IsReadOnly = false,
-                SpellCheck = { IsEnabled = true },
-                VerticalScrollBarVisibility = ScrollBarVisibility.Auto
-            };
-
+            Box = new RichTextBox { IsReadOnly = false, SpellCheck = { IsEnabled = true }, VerticalScrollBarVisibility = ScrollBarVisibility.Auto };
             Box.TextChanged += (s, e) => MagicSpellBox_TextChanged(s, e);
             base.Child = Box;
             Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular);
@@ -82,7 +76,7 @@ namespace Rich_Text_Processor
         public bool CanUndo => Box.CanUndo;
         public bool CanRedo => Box.CanRedo;
         public string SelectedText => Box.Selection.Text;
-        public int WordCount => Text.Trim().Split(new char[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Length;
+        public int WordCount => Text.Trim().Split(new char[] { ' ', '\t', '\r', '\n', '\v', '\f' }, StringSplitOptions.RemoveEmptyEntries).Length;
         public int CharCount => new TextRange(Box.Document.ContentStart, Box.Document.ContentEnd).Text.Count(c => !char.IsWhiteSpace(c));
 
         #endregion
@@ -136,6 +130,7 @@ namespace Rich_Text_Processor
                     textPointer = run.ElementEnd.GetNextInsertionPosition(LogicalDirection.Forward);
                 }
             }
+
             return runs;
         }
 

@@ -45,7 +45,7 @@ namespace Rich_Text_Processor
 
         #endregion // end of publish menu
 
-        #region Format Tool
+        #region Format Toolbar
 
         private void ButtonFontSelect_Click(object sender, EventArgs e) => FormatToolbarHandler.HandleFontSelect(magicSpellBox, fontDialog);
         private void ButtonFontColor_Click(object sender, EventArgs e) => FormatToolbarHandler.HandleFontColor(magicSpellBox, colorDialog);
@@ -59,20 +59,15 @@ namespace Rich_Text_Processor
 
         #endregion // end format toolbar
 
-        #region Word and Character Count
+        #region Status Strip
 
         private new void TextChanged(object sender, EventArgs e)
         {
-            TextChanged_WordCount();
-            TextChanged_CharacterCount();
+            WordAndCharCountHandler.HandleWordCount(magicSpellBox, labelWordCount);
+            WordAndCharCountHandler.HandleWordCount(magicSpellBox, labelCharCount);
         }
 
-        private void TextChanged_WordCount() => labelWordCount.Text = string.IsNullOrEmpty(magicSpellBox.Text.Trim())
-                ? "0 words" : magicSpellBox.WordCount <= 1 ? "1 word" : $"{magicSpellBox.WordCount} words";
-
-        private void TextChanged_CharacterCount() => labelCharCount.Text = $"{magicSpellBox.CharCount} characters";
-
-        #endregion // end word and character count
+        #endregion // end status strip
 
         #region Hotkeys
 

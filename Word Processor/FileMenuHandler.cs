@@ -22,7 +22,6 @@ namespace Rich_Text_Processor
                 }
 
                 form.CurrentFile = "";
-                form.Text = "Editor: New Document";
                 magicSpellBox.Modified = false;
                 magicSpellBox.ResetText();
             }
@@ -82,7 +81,7 @@ namespace Rich_Text_Processor
 
                     form.CurrentFile = saveFileDialog.FileName;
                     magicSpellBox.Modified = false;
-                    form.Text = $"Editor: {form.CurrentFile}";
+                    form.Text = $"Rich Text Processor: {form.CurrentFile}";
                     MessageBox.Show($"{form.CurrentFile} saved.", "File Save");
                 }
                 else MessageBox.Show("Save File request canceled by user.", "Canceled");
@@ -152,7 +151,7 @@ namespace Rich_Text_Processor
 
                     form.CurrentFile = openFileDialog.FileName;
                     magicSpellBox.Modified = false;
-                    form.Text = $"Editor: {form.CurrentFile}";
+                    form.Text = $"Rich Text Processor: {form.CurrentFile}";
                 }
                 else MessageBox.Show("Open File request canceled by user.", "Canceled");
             }
