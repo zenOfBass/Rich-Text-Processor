@@ -21,33 +21,32 @@ namespace Rich_Text_Processor
     {
         public MagicSpellBox()
         {
-            Box = new RichTextBox();
-            Box.IsReadOnly = false;
+            Box = new RichTextBox
+            {
+                IsReadOnly = false,
+                SpellCheck = { IsEnabled = true },
+                VerticalScrollBarVisibility = ScrollBarVisibility.Auto
+            };
+
             Box.TextChanged += (s, e) => MagicSpellBox_TextChanged(s, e);
-            Box.SpellCheck.IsEnabled = true;
-            Box.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
             base.Child = Box;
             Font = new Font("Microsoft Sans Serif", 10, FontStyle.Regular);
             Multiline = true;
-            Size = new System.Drawing.Size(100, 20);
         }
+
+        #region Properties
 
         public RichTextBox Box { get; }
 
         [Browsable(true)]
         [Category("Extended Properties")]
-        [Description("Set if the RichTextBox's Text has been changed")]
+        [Description("If the RichTextBox's Text has been changed")]
         public bool Modified { get; set; }
 
         [Browsable(true)]
         [Category("Action")]
         [Description("Invoked when Text Changes")]
         public new event EventHandler TextChanged;
-        protected void MagicSpellBox_TextChanged(object sender, EventArgs e)
-        {
-            TextChanged?.Invoke(this, e);
-            Modified = true;
-        }
 
         [DefaultValue(false)]
         public override string Text
@@ -74,24 +73,39 @@ namespace Rich_Text_Processor
             set { /* Do nothing */ } // This must be done to fix an issue with the serializer
         }
 
+        public Font SelectionFont
+        {
+            get => ConvertToFont(Box.Selection.GetPropertyValue(Control.FontFamilyProperty), Box.Selection.GetPropertyValue(Control.FontSizeProperty));
+            set => ApplyFont(value);
+        }
+
+        public bool CanUndo => Box.CanUndo;
+        public bool CanRedo => Box.CanRedo;
+        public string SelectedText => Box.Selection.Text;
+        public int WordCount => Text.Trim().Split(new char[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Length;
+        public int CharCount => new TextRange(Box.Document.ContentStart, Box.Document.ContentEnd).Text.Count(c => !char.IsWhiteSpace(c));
+
+        #endregion
+
+        #region Events
+
+        protected void MagicSpellBox_TextChanged(object sender, EventArgs e)
+        {
+            TextChanged?.Invoke(this, e);
+            Modified = true;
+        }
+
+        #endregion
+
+        #region Methods
+
+        public void Undo() => Box.Undo();
+        public void Redo() => Box.Redo();
         public void SelectAll() => Box.SelectAll();
         public void Copy() => Box.Copy();
         public void Cut() => Box.Cut();
         public void Paste() => Box.Paste();
-        public bool CanUndo => Box.CanUndo;
-        public bool CanRedo => Box.CanRedo;
-        public void Undo() => Box.Undo();
-        public void Redo() => Box.Redo();
-        public string SelectedText => Box.Selection.Text;
-        public int WordCount => Text.Trim().Split(new char[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Length;
-        public int CharCount => new TextRange(Box.Document.ContentStart, Box.Document.ContentEnd).Text.Count(c => !char.IsWhiteSpace(c));
         private Font ConvertToFont(object fontFamily, object fontSize) => new Font(fontFamily as string, (float)(double)Convert.ToDouble(fontSize));
-
-        public Font SelectionFont
-        {
-            get { return ConvertToFont(Box.Selection.GetPropertyValue(Control.FontFamilyProperty), Box.Selection.GetPropertyValue(Control.FontSizeProperty)); }
-            set { ApplyFont(value); }
-        }
 
         private void ApplyFont(Font font)
         {
@@ -177,5 +191,7 @@ namespace Rich_Text_Processor
         {
             if (Box.Selection != null) new TextRange(Box.Selection.Start, Box.Selection.End).ApplyPropertyValue(TextElement.ForegroundProperty, new SolidColorBrush(color.ToMediaColor()));
         }
+
+        #endregion
     }
 }
