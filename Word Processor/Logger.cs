@@ -3,12 +3,7 @@ using System.IO;
 
 namespace Rich_Text_Processor
 {
-    public enum LogLevel
-    {
-        Info,
-        Warning,
-        Error
-    }
+    public enum LogLevel { Info, Warning, Error }
 
     public static class Logger
     {

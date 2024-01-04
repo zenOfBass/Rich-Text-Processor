@@ -1,4 +1,5 @@
-﻿using System.Media;
+﻿using System;
+using System.Media;
 using System.Windows;
 using System.Windows.Forms;
 
@@ -15,8 +16,9 @@ namespace Rich_Text_Processor
                 fontDialog.ShowApply = true;
                 if (fontDialog.ShowDialog() == DialogResult.OK) magicSpellBox.SelectionFont = fontDialog.Font;
             }
-            catch
+            catch (Exception ex)
             {
+                Logger.Log(LogLevel.Error, $"Error handling Font Select: {ex.Message}");
                 SystemSounds.Hand.Play();
             }
         }
@@ -28,8 +30,9 @@ namespace Rich_Text_Processor
                 colorDialog.Color = magicSpellBox.ForeColor;
                 if (colorDialog.ShowDialog() == DialogResult.OK) magicSpellBox.ApplySelectionForeground(colorDialog.Color);
             }
-            catch
+            catch (Exception ex)
             {
+                Logger.Log(LogLevel.Error, $"Error handling Font Color: {ex.Message}");
                 SystemSounds.Hand.Play();
             }
         }
@@ -40,8 +43,9 @@ namespace Rich_Text_Processor
             {
                 magicSpellBox.Bold();
             }
-            catch
+            catch (Exception ex)
             {
+                Logger.Log(LogLevel.Error, $"Error handling Bold: {ex.Message}");
                 SystemSounds.Hand.Play();
             }
         }
@@ -52,8 +56,9 @@ namespace Rich_Text_Processor
             {
                 magicSpellBox.Italic();
             }
-            catch
+            catch (Exception ex)
             {
+                Logger.Log(LogLevel.Error, $"Error handling Italic: {ex.Message}");
                 SystemSounds.Hand.Play();
             }
         }
@@ -64,8 +69,9 @@ namespace Rich_Text_Processor
             {
                 magicSpellBox.Underline();
             }
-            catch
+            catch (Exception ex)
             {
+                Logger.Log(LogLevel.Error, $"Error handling Underline: {ex.Message}");
                 SystemSounds.Hand.Play();
             }
         }
@@ -76,8 +82,9 @@ namespace Rich_Text_Processor
             {
                 magicSpellBox.SetAlignment(TextAlignment.Left);
             }
-            catch
+            catch (Exception ex)
             {
+                Logger.Log(LogLevel.Error, $"Error handling Align Left: {ex.Message}");
                 SystemSounds.Hand.Play();
             }
         }
@@ -88,8 +95,9 @@ namespace Rich_Text_Processor
             {
                 magicSpellBox.SetAlignment(TextAlignment.Center);
             }
-            catch
+            catch (Exception ex)
             {
+                Logger.Log(LogLevel.Error, $"Error handling Align Center: {ex.Message}");
                 SystemSounds.Hand.Play();
             }
         }
@@ -100,8 +108,9 @@ namespace Rich_Text_Processor
             {
                 magicSpellBox.SetAlignment(TextAlignment.Right);
             }
-            catch
+            catch (Exception ex)
             {
+                Logger.Log(LogLevel.Error, $"Error handling Align Right: {ex.Message}");
                 SystemSounds.Hand.Play();
             }
         }
@@ -112,8 +121,9 @@ namespace Rich_Text_Processor
             {
                 magicSpellBox.Bullet();
             }
-            catch
+            catch (Exception ex)
             {
+                Logger.Log(LogLevel.Error, $"Error handling Bullets: {ex.Message}");
                 SystemSounds.Hand.Play();
             }
         }
