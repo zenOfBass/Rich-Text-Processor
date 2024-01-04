@@ -56,34 +56,52 @@ namespace Rich_Text_Processor
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    if (openFileDialog.FileName == "") return;
-
-                    string strExt = Path.GetExtension(openFileDialog.FileName).ToUpper();
-
-                    if (strExt == ".RTF")
+                    if (openFileDialog.FileName != "")
                     {
-                        var textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);
-                    }
-                    else
-                    {
-                        try
-                        {
-                            using (StreamReader txtReader = new StreamReader(openFileDialog.FileName)) magicSpellBox.Text = txtReader.ReadToEnd();
-                            TextRange textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);
-                            magicSpellBox.Box.Selection.Select(textRange.Start, textRange.End);
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.Log(LogLevel.Error, $"Error opening file: {ex.Message}");
-                            Messager.ShowErrorMessage($"Error opening file: {ex.Message}", "Open File Error");
-                        }
-                    }
+                        string strExt = Path.GetExtension(openFileDialog.FileName).ToUpper();
 
-                    form.CurrentFile = openFileDialog.FileName;
-                    magicSpellBox.Modified = false;
-                    form.Text = $"Rich Text Processor: {form.CurrentFile}";
+                        if (strExt == ".RTF")
+                        {
+                            try
+                            {
+                                using (FileStream fileStream = new FileStream(openFileDialog.FileName, FileMode.Open))
+                                {
+                                    var range = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);
+                                    range.Load(fileStream, DataFormats.Rtf);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.Log(LogLevel.Error, $"Error opening RTF file: {ex.Message}");
+                                Messager.ShowErrorMessage($"Error opening RTF file: {ex.Message}", "Open File Error");
+                                SystemSounds.Hand.Play();
+                            }
+                        }
+                        else
+                        {
+                            using (StreamReader txtReader = new StreamReader(openFileDialog.FileName))
+                            {
+                                try
+                                {
+                                    magicSpellBox.Text = txtReader.ReadToEnd();
+                                    TextRange textRange = new TextRange(magicSpellBox.Box.Document.ContentStart, magicSpellBox.Box.Document.ContentEnd);
+                                    magicSpellBox.Box.Selection.Select(textRange.Start, textRange.End);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Logger.Log(LogLevel.Error, $"Error opening file: {ex.Message}");
+                                    Messager.ShowErrorMessage($"Error opening file: {ex.Message}", "Open File Error");
+                                    SystemSounds.Hand.Play();
+                                }
+                            }
+                        }
+
+                        form.CurrentFile = openFileDialog.FileName;
+                        magicSpellBox.Modified = false;
+                        form.Text = $"Rich Text Processor: {form.CurrentFile}";
+                    }
                 }
-                else MessageBox.Show("Open File request canceled by user.", "Canceled");
+                else Messager.ShowErrorMessage("Open File request canceled by user.", "Canceled");
             }
             catch (Exception ex)
             {
@@ -92,6 +110,7 @@ namespace Rich_Text_Processor
                 SystemSounds.Hand.Play();
             }
         }
+
 
         public static void HandleSave(MainForm form, MagicSpellBox magicSpellBox, SaveFileDialog saveFileDialog)
         {
@@ -125,7 +144,7 @@ namespace Rich_Text_Processor
                         MessageBox.Show($"{form.CurrentFile} saved.", "File Save");
                     }
                 }
-                else MessageBox.Show("Save File request canceled by the user.", "Canceled");
+                else Messager.ShowErrorMessage("Save File request canceled by the user.", "Canceled");
             }
             catch (Exception ex)
             {
