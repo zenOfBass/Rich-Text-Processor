@@ -30,14 +30,22 @@ namespace Rich_Text_Processor
                 string formattedMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {level}: {message}";
                 Console.WriteLine(formattedMessage);
 
-                // Using different RTF formatting based on log level
-                string rtfFormatting = level switch
+                string rtfFormatting; // Using different RTF formatting based on log level
+                switch (level)
                 {
-                    LogLevel.Info => @"\cf0",
-                    LogLevel.Warning => @"\cf1",
-                    LogLevel.Error => @"\cf2",
-                    _ => @"\cf0", // Default to INFO
-                };
+                    case LogLevel.Info:
+                        rtfFormatting = @"\cf0";
+                        break;
+                    case LogLevel.Warning:
+                        rtfFormatting = @"\cf1";
+                        break;
+                    case LogLevel.Error:
+                        rtfFormatting = @"\cf2";
+                        break;
+                    default:
+                        rtfFormatting = @"\cf0"; // Default to INFO
+                        break;
+                }
 
                 File.AppendAllText(LogFilePath, $@"\par {rtfFormatting} {formattedMessage}\par\par");
             }
