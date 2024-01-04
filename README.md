@@ -17,7 +17,6 @@ Rich Text Processor is a lightweight text editor application with rich text edit
 
 ### Installation
 1. Clone the repository.
-   ```git clone https://github.com/your-username/rich-text-processor.git```
 
 2. Build the project using Visual Studio or your preferred IDE.
 
