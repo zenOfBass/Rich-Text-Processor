@@ -111,7 +111,6 @@ namespace Rich_Text_Processor
             }
         }
 
-
         public static void HandleSave(MainForm form, MagicSpellBox magicSpellBox, SaveFileDialog saveFileDialog)
         {
             try
