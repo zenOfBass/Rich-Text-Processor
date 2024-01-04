@@ -21,7 +21,7 @@ namespace Rich_Text_Processor
             catch (Exception ex)
             {
                 Logger.Log(LogLevel.Error, $"Error handling Print Preview: {ex.Message}");
-                ShowErrorMessage("Error occurred during Print Preview.", "Print Preview Error");
+                Messager.ShowErrorMessage("Error occurred during Print Preview.", "Print Preview Error");
                 SystemSounds.Hand.Play();
             }
         }
@@ -36,7 +36,7 @@ namespace Rich_Text_Processor
             catch (Exception ex)
             {
                 Logger.Log(LogLevel.Error, $"Error handling Print: {ex.Message}");
-                ShowErrorMessage("Error occurred during Print.", "Print Error");
+                Messager.ShowErrorMessage("Error occurred during Print.", "Print Error");
                 SystemSounds.Hand.Play();
             }
         }
@@ -51,7 +51,7 @@ namespace Rich_Text_Processor
             catch (Exception ex)
             {
                 Logger.Log(LogLevel.Error, $"Error handling Page Setup: {ex.Message}");
-                ShowErrorMessage("Error occurred during Page Setup.", "Page Setup Error");
+                Messager.ShowErrorMessage("Error occurred during Page Setup.", "Page Setup Error");
                 SystemSounds.Hand.Play();
             }
         }
@@ -68,7 +68,7 @@ namespace Rich_Text_Processor
             catch (Exception ex)
             {
                 Logger.Log(LogLevel.Error, $"Error handling Begin Print: {ex.Message}");
-                ShowErrorMessage("Error occurred during Begin Print.", "Begin Print Error");
+                Messager.ShowErrorMessage("Error occurred during Begin Print.", "Begin Print Error");
                 SystemSounds.Hand.Play();
             }
         }
@@ -99,11 +99,9 @@ namespace Rich_Text_Processor
             catch (Exception ex)
             {
                 Logger.Log(LogLevel.Error, $"Error handling Print Page: {ex.Message}");
-                ShowErrorMessage("Error occurred during Print Page.", "Print Page Error");
+                Messager.ShowErrorMessage("Error occurred during Print Page.", "Print Page Error");
                 SystemSounds.Hand.Play();
             }
         }
-
-        private static void ShowErrorMessage(string message, string caption) => MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
     }
 }

@@ -13,7 +13,7 @@ namespace Rich_Text_Processor
             try
             {
                 if (magicSpellBox.Modified && !string.IsNullOrEmpty(magicSpellBox.Text.Trim()))
-                    if (MessageBox.Show("Save the current document before creating a new document?", "Unsaved Document") == DialogResult.Yes) HandleSave(form, magicSpellBox, saveFileDialog);
+                    if (Messager.ShowYesNoMessage("Save the current document before creating a new document?", "Unsaved Document") == DialogResult.Yes) HandleSave(form, magicSpellBox, saveFileDialog);
 
                 form.CurrentFile = "";
                 magicSpellBox.Modified = false;
@@ -22,7 +22,7 @@ namespace Rich_Text_Processor
             catch (Exception ex)
             {
                 Logger.Log(LogLevel.Error, $"Error handling new document: {ex.Message}");
-                ShowErrorMessage($"Error handling new document: {ex.Message}", "Error");
+                Messager.ShowErrorMessage($"Error handling new document: {ex.Message}", "Error");
                 SystemSounds.Hand.Play();
             }
         }
@@ -32,14 +32,14 @@ namespace Rich_Text_Processor
             try
             {
                 if (magicSpellBox.Modified && !string.IsNullOrEmpty(magicSpellBox.Text.Trim()))
-                    if (ShowYesNoMessage("Save the current file before opening another document?", "Unsaved Document") == DialogResult.Yes) HandleSave(form, magicSpellBox, saveFileDialog);
+                    if (Messager.ShowYesNoMessage("Save the current file before opening another document?", "Unsaved Document") == DialogResult.Yes) HandleSave(form, magicSpellBox, saveFileDialog);
 
                 OpenFile(form, magicSpellBox, openFileDialog);
             }
             catch (Exception ex)
             {
                 Logger.Log(LogLevel.Error, $"Error handling opening document: {ex.Message}");
-                ShowErrorMessage($"Error handling opening document: {ex.Message}", "Error");
+                Messager.ShowErrorMessage($"Error handling opening document: {ex.Message}", "Error");
                 SystemSounds.Hand.Play();
             }
         }
@@ -73,14 +73,14 @@ namespace Rich_Text_Processor
                     form.CurrentFile = saveFileDialog.FileName;
                     magicSpellBox.Modified = false;
                     form.Text = $"Rich Text Processor: {form.CurrentFile}";
-                    ShowErrorMessage($"{form.CurrentFile} saved.", "File Save");
+                    Messager.ShowErrorMessage($"{form.CurrentFile} saved.", "File Save");
                 }
                 else MessageBox.Show("Save File request canceled by the user.", "Canceled");
             }
             catch (Exception ex)
             {
                 Logger.Log(LogLevel.Error, $"Error saving document: {ex.Message}");
-                MessageBox.Show($"Error saving document: {ex.Message}", "Save Error");
+                Messager.ShowErrorMessage($"Error saving document: {ex.Message}", "Save Error");
                 SystemSounds.Hand.Play();
             }
         }
@@ -92,7 +92,7 @@ namespace Rich_Text_Processor
             {
                 if (magicSpellBox.Modified && !string.IsNullOrEmpty(magicSpellBox.Text.Trim()))
                 {
-                    if (ShowYesNoMessage("Save this document before closing?", "Unsaved Document") == DialogResult.Yes) HandleSave(form, magicSpellBox, saveFileDialog);
+                    if (Messager.ShowYesNoMessage("Save this document before closing?", "Unsaved Document") == DialogResult.Yes) HandleSave(form, magicSpellBox, saveFileDialog);
                     else
                     {
                         magicSpellBox.Modified = false;
@@ -108,7 +108,7 @@ namespace Rich_Text_Processor
             catch (Exception ex)
             {
                 Logger.Log(LogLevel.Error, $"Error handling exit: {ex.Message}");
-                ShowErrorMessage($"Error handling exit: {ex.Message}", "Exit Error");
+                Messager.ShowErrorMessage($"Error handling exit: {ex.Message}", "Exit Error");
                 SystemSounds.Hand.Play();
             }
         }
@@ -144,7 +144,7 @@ namespace Rich_Text_Processor
                         catch (Exception ex)
                         {
                             Logger.Log(LogLevel.Error, $"Error opening file: {ex.Message}");
-                            ShowErrorMessage($"Error opening file: {ex.Message}", "Open File Error");
+                            Messager.ShowErrorMessage($"Error opening file: {ex.Message}", "Open File Error");
                         }
                     }
 
@@ -157,12 +157,9 @@ namespace Rich_Text_Processor
             catch (Exception ex)
             {
                 Logger.Log(LogLevel.Error, $"Error handling open file: {ex.Message}");
-                ShowErrorMessage($"Error handling open file: {ex.Message}", "Open File Error");
+                Messager.ShowErrorMessage($"Error handling open file: {ex.Message}", "Open File Error");
                 SystemSounds.Hand.Play();
             }
         }
-
-        private static void ShowErrorMessage(string message, string caption) => MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-        private static DialogResult ShowYesNoMessage(string message, string caption) => MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
     }
 }
