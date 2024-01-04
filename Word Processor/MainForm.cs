@@ -2,13 +2,16 @@
 using System.Drawing.Printing;
 using System.Media;
 using System.Windows.Forms;
-using Word_Processor;
 
 namespace Rich_Text_Processor
-{ // open namespace
+{
     public partial class MainForm : Form
-    { // open class
-        public MainForm() => InitializeComponent();
+    {
+        public MainForm()
+        {
+            InitializeComponent();
+            magicSpellBox.Text = string.Empty;
+        }
 
         public string CurrentFile { get; set; }
 
@@ -37,12 +40,12 @@ namespace Rich_Text_Processor
         private void PreviewToolStripMenuItem_Click(object sender, EventArgs e) => PublishMenuHandler.HandlePreview(printPreviewDialog, printDocument);
         private void PrintToolStripMenuItem_Click(object sender, EventArgs e) => PublishMenuHandler.HandlePrint(printDialog, printDocument);
         private void PageSetupToolStripMenuItem_Click(object sender, EventArgs e) => PublishMenuHandler.HandlePageSetup(pageSetupDialog, printDocument);
-        private void PrintDocument_BeginPrint(object sender, PrintEventArgs e) => PublishMenuHandler.HandleBeginPrint(magicSpellBox, printDialog, printDocument, e);
+        private void PrintDocument_BeginPrint(object sender, PrintEventArgs e) => PublishMenuHandler.HandleBeginPrint(magicSpellBox, printDialog);
         private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e) => PublishMenuHandler.HandlePrintPage(magicSpellBox, e);
 
         #endregion // end of publish menu
 
-        #region Format Tool
+        #region Format Toolbar
 
         private void ButtonFontSelect_Click(object sender, EventArgs e) => FormatToolbarHandler.HandleFontSelect(magicSpellBox, fontDialog);
         private void ButtonFontColor_Click(object sender, EventArgs e) => FormatToolbarHandler.HandleFontColor(magicSpellBox, colorDialog);
@@ -56,13 +59,72 @@ namespace Rich_Text_Processor
 
         #endregion // end format toolbar
 
+        #region Status Strip
+
+        private new void TextChanged(object sender, EventArgs e)
+        {
+            WordAndCharCountHandler.HandleWordCount(magicSpellBox, labelWordCount);
+            WordAndCharCountHandler.HandleWordCount(magicSpellBox, labelCharCount);
+        }
+
+        #endregion // end status strip
+
+        #region Hotkeys
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if ((keyData & Keys.Control) == Keys.Control)
+            {
+                switch (keyData & ~Keys.Control)
+                {
+                    case Keys.B:
+                        FormatToolbarHandler.HandleBold(magicSpellBox);
+                        return true;
+                    case Keys.I:
+                        FormatToolbarHandler.HandleItalic(magicSpellBox);
+                        return true;
+                    case Keys.U:
+                        FormatToolbarHandler.HandleUnderline(magicSpellBox);
+                        return true;
+                    case Keys.L:
+                        FormatToolbarHandler.HandleAlignLeft(magicSpellBox);
+                        return true;
+                    case Keys.M:
+                        FormatToolbarHandler.HandleAlignCenter(magicSpellBox);
+                        return true;
+                    case Keys.R:
+                        FormatToolbarHandler.HandleAlignRight(magicSpellBox);
+                        return true;
+                    case Keys.OemPeriod:
+                        FormatToolbarHandler.HandleBullets(magicSpellBox);
+                        return true;
+                    case Keys.S:
+                        FileMenuHandler.HandleSave(this, magicSpellBox, saveFileDialog);
+                        return true;
+                    case Keys.O:
+                        FileMenuHandler.HandleOpen(this, magicSpellBox, saveFileDialog, openFileDialog);
+                        return true;
+                    case Keys.N:
+                        FileMenuHandler.HandleNew(this, magicSpellBox, saveFileDialog);
+                        return true;
+                    case Keys.P:
+                        PublishMenuHandler.HandlePrint(printDialog, printDocument);
+                        return true;
+                }
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        #endregion
+
         #region Main Form Closing
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
             try
             {
-                if (magicSpellBox.Modified == true && string.IsNullOrEmpty(magicSpellBox.Text.Trim()))
+                if (magicSpellBox.Modified && !string.IsNullOrEmpty(magicSpellBox.Text.Trim()))
                 {
                     DialogResult answer = MessageBox.Show("Save current document before exiting?",
                                             "Unsaved Document",
@@ -74,11 +136,10 @@ namespace Rich_Text_Processor
                         magicSpellBox.ResetText();
                         return;
                     }
-                    else SaveToolStripMenuItem_Click(this, new EventArgs());
+                    else FileMenuHandler.HandleSave(this, magicSpellBox, saveFileDialog);
                 }
                 else magicSpellBox.ResetText();
                 CurrentFile = "";
-                Text = "Editor: New Document";
             }
             catch
             {
@@ -87,20 +148,5 @@ namespace Rich_Text_Processor
         }
 
         #endregion // end form closing handler
-
-        #region Word and Character Count
-
-        private new void TextChanged(object sender, EventArgs e)
-        {
-            TextChanged_WordCount();
-            TextChanged_CharacterCount();
-        }
-
-        private void TextChanged_WordCount() => labelWordCount.Text = string.IsNullOrEmpty(magicSpellBox.Text.Trim())
-                ? "0 words" : magicSpellBox.WordCount <= 1 ? "1 word" : $"{magicSpellBox.WordCount} words";
-
-        private void TextChanged_CharacterCount() => labelCharCount.Text = $"{magicSpellBox.CharCount} characters";
-
-        #endregion // end word and character count
-    } // close class
-} // close namespace
+    }
+}

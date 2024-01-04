@@ -57,6 +57,7 @@
     <Compile Include="EditMenuHandler.cs" />
     <Compile Include="FileMenuHandler.cs" />
     <Compile Include="FormatToolbarHandler.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,9 +65,11 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MagicSpellBox.cs" />
+    <Compile Include="Messager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublishMenuHandler.cs" />
+    <Compile Include="WordAndCharCountHandler.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>

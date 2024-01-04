@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Media;
-using System.Windows.Forms;
 
 namespace Rich_Text_Processor
 {
@@ -12,9 +11,10 @@ namespace Rich_Text_Processor
             {
                 magicSpellBox.SelectAll();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ShowErrorMessage("Unable to select all document content.", "RTE - Select");
+                Logger.Log(LogLevel.Error, $"Error handling Select All: {ex.Message}");
+                SystemSounds.Hand.Play();
             }
         }
 
@@ -24,9 +24,10 @@ namespace Rich_Text_Processor
             {
                 magicSpellBox.Copy();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ShowErrorMessage("Unable to copy document content.", "RTE - Copy");
+                Logger.Log(LogLevel.Error, $"Error handling Copy: {ex.Message}");
+                SystemSounds.Hand.Play();
             }
         }
 
@@ -36,9 +37,10 @@ namespace Rich_Text_Processor
             {
                 magicSpellBox.Cut();
             }
-            catch
+            catch (Exception ex)
             {
-                ShowErrorMessage("Unable to cut document content.", "RTE - Cut");
+                Logger.Log(LogLevel.Error, $"Error handling Cut: {ex.Message}");
+                SystemSounds.Hand.Play();
             }
         }
 
@@ -48,9 +50,10 @@ namespace Rich_Text_Processor
             {
                 magicSpellBox.Paste();
             }
-            catch
+            catch (Exception ex)
             {
-                ShowErrorMessage("Unable to copy clipboard content to document.", "RTE - Paste");
+                Logger.Log(LogLevel.Error, $"Error handling Paste: {ex.Message}");
+                SystemSounds.Hand.Play();
             }
         }
 
@@ -60,8 +63,9 @@ namespace Rich_Text_Processor
             {
                 if (magicSpellBox.CanUndo) magicSpellBox.Undo();
             }
-            catch
+            catch (Exception ex)
             {
+                Logger.Log(LogLevel.Error, $"Error handling Undo: {ex.Message}");
                 SystemSounds.Hand.Play();
             }
         }
@@ -72,12 +76,11 @@ namespace Rich_Text_Processor
             {
                 if (magicSpellBox.CanRedo) magicSpellBox.Redo();
             }
-            catch
+            catch (Exception ex)
             {
+                Logger.Log(LogLevel.Error, $"Error handling Redo: {ex.Message}");
                 SystemSounds.Hand.Play();
             }
         }
-
-        private static void ShowErrorMessage(string message, string caption) => MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
     }
 }
