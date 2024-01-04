@@ -85,6 +85,7 @@ namespace Rich_Text_Processor
             }
         }
 
+
         public static void HandleExit(MainForm form, MagicSpellBox magicSpellBox, SaveFileDialog saveFileDialog)
         {
             try
