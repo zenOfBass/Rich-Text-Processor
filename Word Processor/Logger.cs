@@ -9,9 +9,9 @@ namespace Rich_Text_Processor
     {
         static Logger() => File.WriteAllText(LogFilePath, string.Empty);
 
-        private static readonly object LockObj = new object();
-
         public static string LogFilePath { get; private set; } = "Rich_Text_Processor.log.rtf";
+
+        public static object LockObj { get; } = new object();
 
         public static void SetLogFilePath(string path)
         {
