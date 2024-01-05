@@ -5,7 +5,7 @@ The Rich Text Processor is a lightweight text editor application with rich text 
 
 ## Features
 - **Rich Text Editing**: Format your text with bold, italic, underline, and more.
-- **Spell Checking**: Enable spell check functionality to catch typos and errors.
+- **Spell Checking**: Use spell check to catch typos and errors.
 - **Text Formatting**: Change font, size, color, and alignment.
 - **Undo/Redo**: Easily undo or redo your actions.
 - **Printing Support**: Print your documents with ease.
