@@ -7,6 +7,6 @@ namespace Rich_Text_Processor
         public static void HandleWordCount(MagicSpellBox magicSpellBox, ToolStripStatusLabel labelWordCount) => labelWordCount.Text = string.IsNullOrEmpty(magicSpellBox.Text.Trim())
                 ? "0 words" : magicSpellBox.WordCount <= 1 ? "1 word" : $"{magicSpellBox.WordCount} words";
 
-        public static void HandleCharacterCount(MagicSpellBox magicSpellBox, ToolStripStatusLabel labelCharCount) => labelCharCount.Text = $"{magicSpellBox.CharCount} characters";
+        public static void HandleCharCount(MagicSpellBox magicSpellBox, ToolStripStatusLabel labelCharCount) => labelCharCount.Text = $"{magicSpellBox.CharCount} characters";
     }
 }

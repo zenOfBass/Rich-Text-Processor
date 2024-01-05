@@ -5,7 +5,7 @@ The Rich Text Processor is a lightweight text editor application with rich text 
 
 ## Features
 - **Rich Text Editing**: Format your text with bold, italic, underline, and more.
-- **Spell Checking**: Enable spell check functionality to catch typos and errors.
+- **Spell Checking**: Use spell check to catch typos and errors.
 - **Text Formatting**: Change font, size, color, and alignment.
 - **Undo/Redo**: Easily undo or redo your actions.
 - **Printing Support**: Print your documents with ease.
@@ -23,9 +23,9 @@ The Rich Text Processor is a lightweight text editor application with rich text 
 3. Run the application.
 
 ### Usage
-Applying formatting with the buttons must be done by selecting the text first. Hotkeys do not require this, however, so I prefer to use those.
+Applying formatting with the buttons must be done by selecting the text first. Hotkeys do not require this and will apply the changes from the caret, so I prefer to use those.
 
-Here is a list of all avaible hotkeys for the application.
+Here is a list of all available hotkeys for the application.
 
 | Hotkey          | Action       |
 | --------------- | ------------ |
@@ -40,6 +40,3 @@ Here is a list of all avaible hotkeys for the application.
 | Ctrl + O        | Open         |
 | Ctrl + N        | New          |
 | Ctrl + P        | Print        |
-
-## License
-This project is licensed under the MIT License.
