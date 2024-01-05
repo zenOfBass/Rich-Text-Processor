@@ -1,7 +1,7 @@
 # Rich Text Processor
 
 ## Overview
-The Rich Text Processor is a lightweight text editor application with rich text editing capabilities. It provides a user-friendly interface for creating, editing, and formatting text content.
+The Rich Text Processor is a lightweight text editor application with rich text capabilities. It provides a user-friendly interface for creating, editing, and formatting text content.
 
 ## Features
 - **Rich Text Editing**: Format your text with bold, italic, underline, and more.
@@ -21,6 +21,8 @@ The Rich Text Processor is a lightweight text editor application with rich text 
 2. Build the project using Visual Studio or your preferred IDE.
 
 3. Run the application.
+
+Or, simply download the latest available release.
 
 ### Usage
 Applying formatting with the buttons must be done by selecting the text first. Hotkeys do not require this and will apply the changes from the caret, so I prefer to use those.
