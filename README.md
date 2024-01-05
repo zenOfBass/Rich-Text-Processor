@@ -23,7 +23,7 @@ The Rich Text Processor is a lightweight text editor application with rich text 
 3. Run the application.
 
 ### Usage
-Applying formatting with the buttons must be done by selecting the text first. Hotkeys do not require this and will apply the changes from the caret, however, so I prefer to use those.
+Applying formatting with the buttons must be done by selecting the text first. Hotkeys do not require this and will apply the changes from the caret, so I prefer to use those.
 
 Here is a list of all available hotkeys for the application.
 
