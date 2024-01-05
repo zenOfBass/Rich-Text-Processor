@@ -64,7 +64,7 @@ namespace Rich_Text_Processor
         private new void TextChanged(object sender, EventArgs e)
         {
             WordAndCharCountHandler.HandleWordCount(magicSpellBox, labelWordCount);
-            WordAndCharCountHandler.HandleWordCount(magicSpellBox, labelCharCount);
+            WordAndCharCountHandler.HandleCharCount(magicSpellBox, labelCharCount);
         }
 
         #endregion // end status strip
